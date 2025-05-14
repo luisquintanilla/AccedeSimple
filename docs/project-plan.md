@@ -15,5 +15,8 @@
 - [X] Add Python
 - [ ] Set up Aspire Hosting for AI Models
 - [ ] Add Evals
+- [ ] Fix Python .NET requests
+- [ ] Fix data generation
+- [ ] Add Python OTEL
 - [ ] Set up persistent storage for state
 
