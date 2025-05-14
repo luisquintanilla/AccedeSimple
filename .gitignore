@@ -7,7 +7,7 @@
 .azure
 
 
-.azurite/**/*
+**/.azurite/**/*
 **/.azure/**/*
 
 # dotenv files
