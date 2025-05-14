@@ -1,0 +1,426 @@
+.chat-window {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    max-width: 100%;
+    height: 100%; /* Take full height of parent container */
+    overflow: hidden; /* Control overflow at container level */
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.chat-header {
+    text-align: center;
+    color: #2c5282;
+    padding: 1rem;
+    border-bottom: 1px solid #e8eef4;
+    font-weight: 600;
+}
+
+.chat-header h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Chat container and scrollable area */
+.messages-container {
+    flex-grow: 1;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    overflow-y: auto; /* Allow vertical scrolling */
+    background: #ffffff;
+    position: relative;
+    
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Shadow overlay indicators for scrollable content */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%; /* Take full height */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Trip approval result styling */
+.message.trip-approval-result .message-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.message.trip-approval-result .message-content:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.status-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.status-content {
+    flex-grow: 1;
+}
+
+.status-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+}
+
+.status-details {
+    margin: 0;
+}
+
+/* Status specific styles */
+.trip-status-approved .message-content {
+    background: linear-gradient(135deg, #e6f7eb, #d0f0d9);
+    border-left: 4px solid #38a169;
+}
+
+.trip-status-approved .status-icon {
+    background-color: #38a169;
+    color: white;
+}
+
+.trip-status-approved .status-title {
+    color: #2f855a;
+}
+
+.trip-status-rejected .message-content {
+    background: linear-gradient(135deg, #fed7d7, #feb2b2);
+    border-left: 4px solid #e53e3e;
+}
+
+.trip-status-rejected .status-icon {
+    background-color: #e53e3e;
+    color: white;
+}
+
+.trip-status-rejected .status-title {
+    color: #c53030;
+}
+
+.trip-status-cancelled .message-content {
+    background: linear-gradient(135deg, #feebc8, #fbd38d);
+    border-left: 4px solid #dd6b20;
+}
+
+.trip-status-cancelled .status-icon {
+    background-color: #dd6b20;
+    color: white;
+}
+
+.trip-status-cancelled .status-title {
+    color: #c05621;
+}
+
+.trip-status-pending .message-content {
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+    border-left: 4px solid #4a5568;
+}
+
+.trip-status-pending .status-icon {
+    background-color: #4a5568;
+    color: white;
+}
+
+.trip-status-pending .status-title {
+    color: #2d3748;
+}
+
+/* Fixed position shadow elements that stay anchored to the viewport */
+.scroll-shadow-top,
+.scroll-shadow-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 10px;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.scroll-shadow-top {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 0%, transparent 100%);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.scroll-shadow-bottom {
+    /* Remove the fixed positioning and margin */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.12) 0%, transparent 100%);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Create a separate container for the shadow and form */
+.form-container {
+    position: relative;
+}
+
+/* Position the shadow above the form */
+.form-container .scroll-shadow-bottom {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+}
+
+.scroll-shadow-top.visible,
+.scroll-shadow-bottom.visible {
+    opacity: 1;
+}
+
+/* Remove the old pseudo-element shadows */
+.messages-container::before,
+.messages-container::after {
+    display: none;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.0rem;
+    position: relative;
+    max-width: 75%;
+    width: auto;
+    align-items: flex-start;
+}
+
+.message.user .message-container {
+    margin-left: auto;
+    align-items: flex-end;
+}
+
+.message-content {
+    background: #f0f4f8;
+    color: #4a5568;
+    padding: 12px 18px;
+    border-radius: 12px;
+    position: relative;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    width: auto;
+    max-width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.message.user .message-content {
+    background: #3182ce;
+    color: #ffffff;
+}
+
+.message-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 12px;
+    margin: 10px 0;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+/* Enhance code block styling for enterprise look */
+.message-content pre code {
+    color: #4a5568;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.message.progress-message {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.message.progress-message .message-container {
+    max-width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+.message.progress-message .message-content {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-style: italic;
+    font-size: 1rem;
+    padding: 2px 8px;
+    text-align: center;
+    box-shadow: none;
+}
+.message.progress-message .message-content {
+    width: 100%;
+    max-width: 800px;
+}
+
+.message.progress-message p {
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.message-content a {
+    color: #4299e1;
+    word-break: break-all;
+    max-width: 100%;
+    display: inline-block;
+}
+
+.message.user .message-content a {
+    color: #ebf8ff;
+    text-decoration: underline;
+}
+
+/* Copy button styling */
+.copy-message-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 4px;
+    cursor: pointer;
+    color: #718096;
+}
+
+.message-content:hover .copy-message-button {
+    opacity: 1;
+}
+
+.copy-message-button.copied {
+    background: #48bb78;
+    color: white;
+    border-color: #48bb78;
+}
+
+/* Virtualized list styling */
+.virtualized-message-list {
+    background-color: transparent;
+}
+
+/* Message attachments */
+.message-attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+    max-width: 100%;
+}
+
+.message-image-attachment {
+    max-width: 100%;
+    border-radius: 6px;
+    overflow: hidden;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.attached-image {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    display: block;
+}
+
+.message-file-attachment {
+    padding: 8px 12px;
+    background-color: #edf2f7;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    word-break: break-all;
+}
+
+.message.user .message-file-attachment {
+    background-color: #4a89dc;
+}
+
+.message.user .message-file-attachment a {
+    color: #ffffff;
+}
+
+.chat-item {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+    position: relative;
+    background-color: #f8fafc;
+}
+
+.chat-item:hover {
+    background-color: #edf2f7;
+}
+
+.chat-item.selected {
+    background-color: #ebf8ff;
+    border-left-color: #3182ce;
+}
+
+.issue-number-badge {
+    font-size: 11px;
+    background-color: #edf2f7;
+    color: #718096;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.delete-chat-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: #a0aec0;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.chat-item:hover .delete-chat-button {
+    opacity: 1;
+}
+
+.delete-chat-button:hover {
+    color: #e53e3e;
+}

@@ -1,0 +1,29 @@
+{
+    "name": "Python and .NET DevContainer",
+    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/python:1": {
+            "version": "3.12"
+        },        
+        "ghcr.io/devcontainers/features/dotnet:2": {
+            "version": "9.0"
+        },
+        "ghcr.io/va-h/devcontainers-features/uv:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode-remote.vscode-remote-extensionpack",
+                "ms-azuretools.vscode-docker",
+                "ms-python.python",
+                "ms-dotnettools.csharp",
+                "Ionide.Ionide-fsharp",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "ms-dotnettools.csdevkit"                
+            ]
+        }
+    }
+}

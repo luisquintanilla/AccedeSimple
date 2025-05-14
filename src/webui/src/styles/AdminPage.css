@@ -1,0 +1,286 @@
+.admin-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+}
+
+.admin-header .logo h1 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+}
+
+.header-actions .refresh-button {
+    padding: 8px 16px;
+    background-color: #e9ecef;
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.header-actions .refresh-button:hover {
+    background-color: #dee2e6;
+}
+
+.admin-content {
+    padding: 2rem;
+    flex-grow: 1;
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #c62828;
+    border-radius: 4px;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.no-requests {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    color: #666;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.requests-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1.5rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.requests-list {
+    overflow-y: auto;
+    max-height: 80vh;
+    border-right: 1px solid #e0e0e0;
+}
+
+.request-item {
+    padding: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.request-item:hover {
+    background-color: #f5f7fa;
+}
+
+.request-item.selected {
+    background-color: #e9f5fe;
+    position: relative;
+}
+
+.request-item.selected::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #0078d4;
+}
+
+.request-id {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 0.3rem;
+}
+
+.request-destination {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.request-cost {
+    font-weight: 600;
+    color: #333;
+}
+
+.request-detail {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.detail-section {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section h4 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.detail-description {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.flights-list, .hotel-details, .car-details {
+    margin-bottom: 1.5rem;
+}
+
+.flight-item {
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.flight-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.flight-number {
+    font-weight: 600;
+}
+
+.flight-date {
+    color: #555;
+}
+
+.flight-route {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0.5rem 0;
+}
+
+.flight-arrow {
+    color: #888;
+}
+
+.flight-details {
+    display: flex;
+    justify-content: space-between;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.hotel-name, .car-company {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.hotel-address, .car-type {
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.hotel-dates, .car-dates {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.hotel-room {
+    margin-bottom: 0.5rem;
+}
+
+.hotel-price, .car-price {
+    font-weight: 500;
+}
+
+.request-total-cost {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e0e0e0;
+    font-size: 1.2rem;
+}
+
+.notes-input {
+    margin-bottom: 1.5rem;
+}
+
+.notes-input label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.notes-input textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-height: 120px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.approval-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.approve-button, .reject-button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+}
+
+.approve-button {
+    background-color: #228B22;
+    color: white;
+}
+
+.approve-button:hover {
+    background-color: #1c7a1c;
+}
+
+.reject-button {
+    background-color: #d32f2f;
+    color: white;
+}
+
+.reject-button:hover {
+    background-color: #c62828;
+}
+
+.approve-button:disabled, .reject-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

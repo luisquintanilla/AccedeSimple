@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Reset default browser styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #f7f9fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100%;
+    overflow: hidden; /* Prevent body scrolling */
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Use viewport height */
+    margin: 0;
+    padding-top: 64px; /* Space for fixed header */
+    background-color: #f7f9fc;
+    color: #333;
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent container scrolling */
+}
+
+/* Main content styling */
+.main-content {
+    flex: 1;
+    display: flex;
+    padding: 24px;
+    overflow: auto; /* Allow content area to scroll */
+    box-sizing: border-box;
+}
+
+/* Link styling */
+a {
+    color: #3182ce;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #2c5282;
+}
+
+/* Sidebar styling */
+.sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    width: 280px;
+    padding: 16px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.sidebar-header {
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 16px;
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #2c5282;
+}
+
+.chat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Loading and empty state messages */
+.loading-message, .no-issues-message {
+    padding: 16px;
+    text-align: center;
+    color: #718096;
+    font-style: italic;
+}
+
+.divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 12px 0;
+    width: 100%;
+}

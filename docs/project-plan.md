@@ -1,0 +1,19 @@
+# Project Plan
+
+- [X] Create agent to trigger workflows
+- [X] Refactor into web service
+- [X] Add Aspire
+- [X] Confiture OTEL
+- [X] Add MCP Server
+- [ ] Simplify domain model
+- [X] Add UI
+    - [X] Connect UI to Backend
+    - [X] Handle file uploads
+    - [X] Connect to UI to Proxy Events (SignalR or NATS)
+    - [X] Reconcile message types
+- [X] Configure deployment
+- [X] Add Python
+- [ ] Set up Aspire Hosting for AI Models
+- [ ] Add Evals
+- [ ] Set up persistent storage for state
+

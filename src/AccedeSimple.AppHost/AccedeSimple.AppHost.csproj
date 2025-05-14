@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.2.1" />
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>413a2201-5af2-4940-90a4-d0cc6cd5c244</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1" />
+    <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="9.2.1" />
+    <PackageReference Include="Aspire.Hosting.NodeJS" Version="9.2.1" />
+    <PackageReference Include="Aspire.Hosting.Python" Version="9.2.1" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AccedeSimple.MCPServer\AccedeSimple.MCPServer.csproj" />
+    <ProjectReference Include="..\AccedeSimple.Service\AccedeSimple.Service.csproj" />
+  </ItemGroup>
+
+</Project>

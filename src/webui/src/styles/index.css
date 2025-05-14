@@ -1,0 +1,7 @@
+/* Import all CSS files */
+@import './base.css';
+@import './header.css';
+@import './footer.css';
+@import './chat.css';
+@import './forms.css';
+@import './trip.css';
