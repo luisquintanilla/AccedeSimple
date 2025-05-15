@@ -20,14 +20,16 @@ class CityAttractions(BaseModel):
 # Initialize FastAPI app
 app = FastAPI()
 
-# Initialize the Agent
-model = OpenAIModel('gpt-4o')
-agent = Agent(model, output_type=CityAttractions,system_prompt="You are an expert local guide. Provide detailed information about attractions in the specified city.")
-
 # Root endpoint
 @app.get("/")
 async def root():
     return {"message": "FastAPI is running"}
+
+# Initialize the Agent
+model = OpenAIModel('gpt-4o')
+agent = Agent(model, 
+              output_type=CityAttractions,
+              system_prompt="You are an expert local guide. Provide detailed information about attractions in the specified city.")
 
 # Endpoint to get attractions for a city
 @app.post("/attractions")
@@ -37,8 +39,11 @@ async def get_attractions(query: str):
         structured_result = await agent.run(f"{query}")
 
         # Use the model to provide a more user-friendly response
-        result = await agent.run(f"Please provide a detailed list of attractions in {structured_result.output.city} with the following details: {structured_result.output.attractions}", output_type=str)
-
+        result = await agent.run(f"""Please provide a detailed list of attractions in {structured_result.output.city} with the 
+                                 following details: 
+                                 {structured_result.output.attractions}""", 
+                                 output_type=str)
+        
         return result.output
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

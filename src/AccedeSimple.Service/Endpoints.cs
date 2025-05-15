@@ -322,7 +322,23 @@ public static class Endpoints
 
         sasBuilder.SetPermissions(BlobSasPermissions.Read);
 
-        return new(blobClient.GenerateSasUri(sasBuilder).ToString(), file.ContentType);
+        if (blobClient.CanGenerateSasUri)
+        {
+            return new(blobClient.GenerateSasUri(sasBuilder).ToString(), file.ContentType);
+        }
+        else
+        {
+            var userDelegationKey = blobServiceClient.GetUserDelegationKey(DateTimeOffset.UtcNow,
+                                                                        DateTimeOffset.UtcNow.AddHours(2));
+            var blobUriBuilder = new BlobUriBuilder(blobClient.Uri)
+            {
+                Sas = sasBuilder.ToSasQueryParameters(userDelegationKey, blobServiceClient.AccountName)
+            };
+
+            return new(blobUriBuilder.ToUri().ToString(), file.ContentType);
+        }
+
+        // return new(blobClient.GenerateSasUri(sasBuilder).ToString(), file.ContentType);
     }
 
     private static async ValueTask<string> ConvertToDataUri(Stream stream, string contentType, CancellationToken cancellationToken)
