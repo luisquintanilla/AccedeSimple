@@ -11,13 +11,6 @@ using ModelContextProtocol.Protocol.Transport;
 public static class Extensions
 {
 
-
-    // public static void MapEndpoints(this WebApplication app, string basePath, Action<RouteGroupBuilder> configure)
-    // {
-    //     var group = app.MapGroup(basePath);
-    //     configure(group);
-    // }
-
     public static IServiceCollection AddTravelProcess(
         this IServiceCollection services)
     {
@@ -102,26 +95,5 @@ public static class Extensions
 
         return services;        
     }
-
-    public static IServiceCollection AddChatClient(this IServiceCollection services)
-    {
-        services.AddChatClient(sp =>
-        {
-            var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-            return new ChatClientBuilder(
-                new AzureOpenAIClient(
-                    new Uri(Environment.GetEnvironmentVariable("AOAI_ENDPOINT")),
-                    new DefaultAzureCredential())
-                    .GetChatClient("gpt-4o-mini")
-                    .AsIChatClient())
-                .UseFunctionInvocation()
-                .UseOpenTelemetry()
-                .UseLogging(loggerFactory)
-                .Build();
-        });
-
-        return services;
-    }
-
 }
 #pragma warning restore
