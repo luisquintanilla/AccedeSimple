@@ -147,13 +147,13 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                                 <div className="detail-row">
                                     <span className="detail-label">Departure:</span>
                                     <span className="detail-value date-time">
-                                        {new Date(flight.departureTime).toLocaleDateString()} {new Date(flight.departureTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                        {new Date(flight.departureDateTime).toLocaleDateString()} {new Date(flight.departureDateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                     </span>
                                 </div>
                                 <div className="detail-row">
                                     <span className="detail-label">Arrival:</span>
                                     <span className="detail-value date-time">
-                                        {new Date(flight.arrivalTime).toLocaleDateString()} {new Date(flight.arrivalTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                        {new Date(flight.arrivalDateTime).toLocaleDateString()} {new Date(flight.arrivalDateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                     </span>
                                 </div>
                                 {flight.cabinClass && (
@@ -175,7 +175,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                             <h4>Hotel</h4>
                             <div className="detail-row">
                                 <span className="detail-label">Property:</span>
-                                <span className="detail-value"><strong>{option.hotel.propertyName}</strong></span>
+                                <span className="detail-value"><strong>{option.hotel.hotelName}</strong></span>
                             </div>
                             <div className="detail-row">
                                 <span className="detail-label">Chain:</span>
@@ -200,7 +200,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                             </div>
                             <div className="detail-row">
                                 <span className="detail-label">Duration:</span>
-                                <span className="detail-value"><strong>{option.hotel.nightCount} nights</strong></span>
+                                <span className="detail-value"><strong>{option.hotel.numberOfNights} nights</strong></span>
                             </div>
                             <div className="detail-row">
                                 <span className="detail-label">Room Type:</span>
@@ -248,7 +248,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                             <div className="detail-row">
                                 <span className="detail-label">Time:</span>
                                 <span className="detail-value date-time">
-                                    {new Date(option.car.pickupTime).toLocaleDateString()} {new Date(option.car.pickupTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                    {new Date(option.car.pickupDateTime).toLocaleDateString()} {new Date(option.car.pickupDateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                 </span>
                             </div>
                             <div className="divider"></div>
@@ -262,7 +262,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                             <div className="detail-row">
                                 <span className="detail-label">Time:</span>
                                 <span className="detail-value date-time">
-                                    {new Date(option.car.dropoffTime).toLocaleDateString()} {new Date(option.car.dropoffTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                    {new Date(option.car.dropoffDateTime).toLocaleDateString()} {new Date(option.car.dropoffDateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                                 </span>
                             </div>
                             <div className="divider"></div>

@@ -14,8 +14,8 @@ export interface Flight {
     airline: string;
     origin: string;
     destination: string;
-    departureTime: string;
-    arrivalTime: string;
+    departureDateTime : string;
+    arrivalDateTime: string;
     price: number;
     duration: string;
     hasLayovers: boolean;
@@ -23,12 +23,12 @@ export interface Flight {
 }
 
 export interface Hotel {
-    propertyName: string;
+    hotelName: string;
     chain: string;
     address: string;
     checkIn: string;
     checkOut: string;
-    nightCount: number;
+    numberOfNights: number;
     pricePerNight: number;
     totalPrice: number;
     roomType: string;
@@ -40,8 +40,8 @@ export interface CarRental {
     carType: string;
     pickupLocation: string;
     dropoffLocation: string;
-    pickupTime: string;
-    dropoffTime: string;
+    pickupDateTime: string;
+    dropoffDateTime: string;
     dailyRate: number;
     totalPrice: number;
     unlimitedMileage: boolean;
