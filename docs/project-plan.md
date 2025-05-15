@@ -5,7 +5,7 @@
 - [X] Add Aspire
 - [X] Confiture OTEL
 - [X] Add MCP Server
-- [ ] Simplify domain model
+- [X] Simplify domain model
 - [X] Add UI
     - [X] Connect UI to Backend
     - [X] Handle file uploads
@@ -14,7 +14,7 @@
 - [X] Configure deployment
 - [X] Add Python
 - [X] Set up Aspire Hosting for AI Models
-- [ ] Fix data generation
+- [X] Fix data generation
 - [ ] Add Evals
 - [ ] Fix Python .NET requests
 - [ ] Add Python OTEL
