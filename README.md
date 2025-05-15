@@ -27,18 +27,8 @@ To run the application, ensure the following tools and frameworks are installed:
 
 ## Quick Start
 
-Follow these steps to set up and run the application:
-
-### Environemnt variables
-
-Set the following environment variables
-
-- **AOAI_ENDPOINT** - Your Azure OpenAI Endpoint
-- **OPENAI_API_KEY** - Your OpenAI Endpoint
-
-### Running the app
-
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/your-repo/AccedeSimple.git
    cd AccedeSimple
@@ -46,11 +36,26 @@ Set the following environment variables
 
 2. **Install dependencies**:
    Ensure you have the required .NET SDK installed, then restore dependencies:
+
    ```bash
    dotnet restore
    ```
 
-3. **Run the application**:
+3. **Configure user secrets**
+
+   1. Navigate to the *_src/AccedeSimple.AppHost* project.
+   1. Set the following user secrets. i.e. `dotnet user-secrets set "AzureOpenAI:ResourceGroup" "YOUR-VALUE"`
+      - **AzureOpenAI:ResourceGroup** - The name of your Azure Resource Group where the OpenAI Resource is deployed to
+      - **AzureOpenAI:ResourceName** - The name of your Azure OpenAI Resource
+      - **Azure:SubscriptionId** - The subscription ID you deployed your resources to 
+      - **Azure:ResourceGroup** - The name of your Azure OpenAI Resource is deployed to.
+      - **Azure:Location** - The location you deployed your Azure OpenAI Resource to.
+      - **Azure:AllowResourceGroupCreation**  - Set to *false* to use existing resource.
+
+### Running the app
+
+1. **Run the application**:
+
    Start the application using the .NET CLI:
    ```bash
    dotnet run --project src/AccedeSimple.AppHost
