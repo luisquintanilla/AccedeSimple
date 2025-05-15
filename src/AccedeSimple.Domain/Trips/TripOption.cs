@@ -28,10 +28,4 @@ public record TripOption(
     [Required]
     [Description("Human-readable description of this travel option")]
     string Description
-    
-    // [Description("Whether this option meets all user requirements")]
-    // bool MeetsRequirements = true,
-    
-    // [Description("Any special conditions or restrictions")]
-    // List<string>? Conditions = null
 );
