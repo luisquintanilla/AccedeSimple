@@ -7,6 +7,8 @@ using Microsoft.Extensions.ServiceDiscovery;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using Microsoft.Extensions.AI;
+using Azure.AI.OpenAI;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -34,6 +36,8 @@ public static class Extensions
             // Turn on service discovery by default
             http.AddServiceDiscovery();
         });
+
+        builder.AddAzureOpenAIClient(connectionName: "openai");
 
         // Uncomment the following to restrict the allowed schemes for service discovery.
         // builder.Services.Configure<ServiceDiscoveryOptions>(options =>
@@ -127,5 +131,24 @@ public static class Extensions
         }
 
         return app;
+    }
+
+    public static IServiceCollection AddChatClient(this IServiceCollection services, string modelName)
+    {
+        services.AddChatClient(sp =>
+        {
+            var loggerFactory = sp.GetRequiredService<ILoggerFactory>() ?? throw new InvalidOperationException("ILoggerFactory is not registered.");
+            var azureOpenAIClient = sp.GetRequiredService<AzureOpenAIClient>() ?? throw new InvalidOperationException("AzureOpenAIClient is not registered.");
+            return new ChatClientBuilder(
+                azureOpenAIClient
+                    .GetChatClient(modelName)
+                    .AsIChatClient())
+                .UseFunctionInvocation()
+                .UseOpenTelemetry()
+                .UseLogging(loggerFactory)
+                .Build();
+        });
+
+        return services;
     }
 }

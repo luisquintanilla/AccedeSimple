@@ -14,20 +14,22 @@ builder.Services.AddMcpServer()
     .WithHttpTransport()
     .WithToolsFromAssembly();
 
-builder.Services.AddChatClient(sp =>
-{
-    var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-    return new ChatClientBuilder(
-        new AzureOpenAIClient(
-            new Uri(Environment.GetEnvironmentVariable("AOAI_ENDPOINT")),
-            new DefaultAzureCredential())
-            .GetChatClient("gpt-4o-mini")
-            .AsIChatClient())
-        .UseFunctionInvocation()
-        .UseOpenTelemetry()
-        .UseLogging(loggerFactory)
-        .Build();
-});
+builder.Services.AddChatClient(modelName: "gpt-4o-mini");
+
+// builder.Services.AddChatClient(sp =>
+// {
+//     var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+//     return new ChatClientBuilder(
+//         new AzureOpenAIClient(
+//             new Uri(Environment.GetEnvironmentVariable("AOAI_ENDPOINT")),
+//             new DefaultAzureCredential())
+//             .GetChatClient("gpt-4o-mini")
+//             .AsIChatClient())
+//         .UseFunctionInvocation()
+//         .UseOpenTelemetry()
+//         .UseLogging(loggerFactory)
+//         .Build();
+// });
 
 
 var app = builder.Build();

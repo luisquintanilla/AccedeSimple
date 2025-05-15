@@ -36,7 +36,6 @@ public class ProcessService
 
     public async Task ActAsync(UserIntent userIntent, ChatItem userInput)
     {
-        Console.WriteLine($"Processing {userIntent}: {userInput}");
         switch (userIntent)
         {
             case UserIntent.General:

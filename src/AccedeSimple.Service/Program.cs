@@ -51,7 +51,7 @@ builder.Services.AddMcpClient();
 
 var kernel = builder.Services.AddKernel();
 
-kernel.Services.AddChatClient();
+kernel.Services.AddChatClient(modelName: "gpt-4o-mini");
 
 kernel.Services.AddTransient<ProcessService>();
 kernel.Services.AddTransient<MessageService>();

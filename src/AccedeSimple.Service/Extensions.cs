@@ -103,16 +103,15 @@ public static class Extensions
         return services;        
     }
 
-    public static IServiceCollection AddChatClient(this IServiceCollection services)
+    public static IServiceCollection AddChatClient(this IServiceCollection services, string modelName)
     {
         services.AddChatClient(sp =>
         {
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+            var azureOpenAIClient = sp.GetRequiredService<AzureOpenAIClient>();
             return new ChatClientBuilder(
-                new AzureOpenAIClient(
-                    new Uri(Environment.GetEnvironmentVariable("AOAI_ENDPOINT")),
-                    new DefaultAzureCredential())
-                    .GetChatClient("gpt-4o-mini")
+                azureOpenAIClient
+                    .GetChatClient(modelName)
                     .AsIChatClient())
                 .UseFunctionInvocation()
                 .UseOpenTelemetry()
