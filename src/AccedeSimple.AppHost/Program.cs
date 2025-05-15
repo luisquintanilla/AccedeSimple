@@ -1,12 +1,20 @@
 #pragma warning disable
+using Microsoft.Extensions.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 
 // Configure Azure Services
-var azureStorage = builder.AddAzureStorage("storage").RunAsEmulator(c => {
-    c.WithDataBindMount();
-    c.WithLifetime(ContainerLifetime.Persistent);
-});
+var azureStorage = builder.AddAzureStorage("storage");
+
+
+if (builder.Environment.IsDevelopment())
+{
+    azureStorage.RunAsEmulator(c => {
+        c.WithDataBindMount();
+        c.WithLifetime(ContainerLifetime.Persistent);
+    });    
+}
 
 // Use existing resources
 var azureOpenAIResource = builder.AddParameterFromConfiguration("AzureOpenAIResourceName", "AzureOpenAI:ResourceName");
