@@ -62,3 +62,20 @@ To run the application, ensure the following tools and frameworks are installed:
    ```
 
 You're now ready to use the Accede Travel Concierge application!
+
+## Deployment
+
+Follow the standard [deployment guidance for Aspire](https://learn.microsoft.com/dotnet/aspire/deployment/azure/aca-deployment)
+
+1. In the root directory, run the following command
+
+   ```bash
+   azd init
+   ```
+
+1. Deploy the app
+
+   ```bash
+   azd up
+   ```
+
