@@ -9,7 +9,6 @@
 - [X] Add UI
     - [X] Connect UI to Backend
     - [X] Handle file uploads
-    - [X] Connect to UI to Proxy Events (SignalR or NATS)
     - [X] Reconcile message types
 - [X] Configure deployment
 - [X] Add Python
