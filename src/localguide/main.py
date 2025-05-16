@@ -4,6 +4,22 @@ from pydantic import BaseModel
 from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIModel
 import os
+import logging
+
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+# from opentelemetry.instrumentation.flask import FlaskInstrumentor
+
+
+# from otlp_tracing import configure_oltp_grpc_tracing
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+# Configure OTEL
+logging.basicConfig(level=logging.INFO)
+# tracer = configure_oltp_grpc_tracing("http://localhost:19072")
+logger = logging.getLogger(__name__)
 
 # Define Pydantic models
 class Attraction(BaseModel):
@@ -20,6 +36,13 @@ class CityAttractions(BaseModel):
 # Initialize FastAPI app
 app = FastAPI()
 
+trace.set_tracer_provider(TracerProvider())
+otlpExporter = OTLPSpanExporter(endpoint="http://localhost:19072")
+processor = BatchSpanProcessor(otlpExporter)
+trace.get_tracer_provider().add_span_processor(processor)
+
+FastAPIInstrumentor.instrument_app(app)
+
 # Root endpoint
 @app.get("/")
 async def root():
@@ -27,10 +50,10 @@ async def root():
 
 # Initialize the Agent
 model = OpenAIModel('gpt-4o')
+# Agent.instrument_all()
 agent = Agent(model, 
               output_type=CityAttractions,
               system_prompt="You are an expert local guide. Provide detailed information about attractions in the specified city.")
-
 # Endpoint to get attractions for a city
 @app.post("/attractions")
 async def get_attractions(query: str):
