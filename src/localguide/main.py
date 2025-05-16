@@ -10,8 +10,6 @@ from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-# from opentelemetry.instrumentation.flask import FlaskInstrumentor
-
 
 # from otlp_tracing import configure_oltp_grpc_tracing
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
@@ -50,7 +48,7 @@ async def root():
 
 # Initialize the Agent
 model = OpenAIModel('gpt-4o')
-# Agent.instrument_all()
+Agent.instrument_all()
 agent = Agent(model, 
               output_type=CityAttractions,
               system_prompt="You are an expert local guide. Provide detailed information about attractions in the specified city.")
