@@ -41,6 +41,11 @@ To run the application, ensure the following tools and frameworks are installed:
    dotnet restore
    ```
 
+   ```bash
+   cd src/localguide
+   uv sync
+   ```
+
 3. **Configure user secrets**
 
    1. Navigate to the *_src/AccedeSimple.AppHost* project.
