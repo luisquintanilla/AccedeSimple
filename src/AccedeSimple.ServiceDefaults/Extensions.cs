@@ -152,12 +152,4 @@ public static class Extensions
 
         return cb;
     }
-
-    public static ChatClientBuilder UseSamplingReporter(this ChatClientBuilder builder)
-    {
-        return builder.Use((client) =>
-        {
-            return new SamplingReporter(client);
-        });
-    }        
 }
