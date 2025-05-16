@@ -9,8 +9,6 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Microsoft.Extensions.AI;
 using Azure.AI.OpenAI;
-using Microsoft.SemanticKernel;
-
 namespace Microsoft.Extensions.Hosting;
 
 // Adds common .NET Aspire services: service discovery, resilience, health checks, and OpenTelemetry.
