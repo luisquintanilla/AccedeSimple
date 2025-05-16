@@ -146,17 +146,17 @@ class ChatService {
     }
 
     
-    // async getChat(): Promise<Message[]> {
-    //     console.log('Backend URL:', this.backendUrl);
-    //     console.log('Request URL:', `${this.backendUrl}/chat/messages`);
-    //     const response = await fetch(`${this.backendUrl}/chat/messages?userId=terry-carnation`, {
-    //         method: 'GET',
-    //     });
-    //     if (!response.ok) {
-    //         throw new Error('Failed to fetch chat history');
-    //     }
-    //     return await response.json();
-    // }
+    async getChat(): Promise<Message[]> {
+        console.log('Backend URL:', this.backendUrl);
+        console.log('Request URL:', `${this.backendUrl}/chat/messages`);
+        const response = await fetch(`${this.backendUrl}/chat/messages?userId=terry-carnation`, {
+            method: 'GET',
+        });
+        if (!response.ok) {
+            throw new Error('Failed to fetch chat history');
+        }
+        return await response.json();
+    }
 
     async selectItinerary(messageId: string, optionId: string): Promise<void> {
         const response = await fetch(`${this.backendUrl}/chat/select-itinerary`, {

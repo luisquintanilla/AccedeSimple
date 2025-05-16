@@ -183,15 +183,13 @@ public static class Endpoints
                 return Results.NotFound("No messages found for the specified user ID");
             }
 
-            foreach(var message in messages)
+            var visibleMessages = messages.Where(m => m.IsUserVisible).ToList();
+            foreach (var message in visibleMessages)
             {
-                if(message.IsUserVisible)
-                {
-                    chatStream.AddMessage(message);
-                }
+                chatStream.AddMessage(message);
             }
 
-            return Results.Ok();
+            return Results.Ok(visibleMessages);
         });
 
         group.MapPost("/stream/cancel", async () =>
