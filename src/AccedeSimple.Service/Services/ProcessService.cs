@@ -47,11 +47,10 @@ public class ProcessService
                 // Handle local guide inquiries
                 var builder = new UriBuilder(_httpClient.BaseAddress)
                 {
-                    Path = "/attractions",
-                    Query = $"query={userInput.Text}"
-                };
-                var fullUri = builder.Uri;
-                var localGuideRequest = await _httpClient.PostAsync(builder.Uri, null);
+                    Path = "attractions",
+                    Query = $"query={Uri.EscapeDataString(userInput.Text)}"
+                };             
+                var localGuideRequest = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, builder.Uri));
                 var body = await localGuideRequest.Content.ReadAsStringAsync();
                 await _messageService.AddMessageAsync(new AssistantResponse(body), _userSettings.UserId);
                 break;

@@ -24,7 +24,10 @@ using AccedeSimple.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpClient("LocalGuide", c => {c.BaseAddress = new Uri("http://localguide");c.Timeout = TimeSpan.FromSeconds(120);});
+builder.Services.AddHttpClient("LocalGuide", c =>
+    {
+        c.BaseAddress = new Uri("http://localhost:8000");
+    });
 
 // Load configuration
 builder.Services.Configure<UserSettings>(builder.Configuration.GetSection("UserSettings"));
