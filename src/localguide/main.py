@@ -12,11 +12,11 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 # from otlp_tracing import configure_oltp_grpc_tracing
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+# from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 # Configure OTEL
 logging.basicConfig(level=logging.INFO)
-# tracer = configure_oltp_grpc_tracing("http://localhost:19072")
+# tracer = configure_oltp_grpc_tracing(os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
 logger = logging.getLogger(__name__)
 
 # Define Pydantic models
@@ -35,11 +35,9 @@ class CityAttractions(BaseModel):
 app = FastAPI()
 
 trace.set_tracer_provider(TracerProvider())
-otlpExporter = OTLPSpanExporter(endpoint="http://localhost:19072")
+otlpExporter = OTLPSpanExporter(endpoint=os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT"))
 processor = BatchSpanProcessor(otlpExporter)
 trace.get_tracer_provider().add_span_processor(processor)
-
-FastAPIInstrumentor.instrument_app(app)
 
 # Root endpoint
 @app.get("/")
