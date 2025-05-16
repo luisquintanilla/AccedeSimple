@@ -9,6 +9,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Microsoft.Extensions.AI;
 using Azure.AI.OpenAI;
+using Microsoft.SemanticKernel;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -133,9 +134,9 @@ public static class Extensions
         return app;
     }
 
-    public static IServiceCollection AddChatClient(this IServiceCollection services, string modelName)
+    public static ChatClientBuilder AddChatClient(this IServiceCollection services, string modelName)
     {
-        services.AddChatClient(sp =>
+        var cb = services.AddChatClient(sp =>
         {
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>() ?? throw new InvalidOperationException("ILoggerFactory is not registered.");
             var azureOpenAIClient = sp.GetRequiredService<AzureOpenAIClient>() ?? throw new InvalidOperationException("AzureOpenAIClient is not registered.");
@@ -143,12 +144,20 @@ public static class Extensions
                 azureOpenAIClient
                     .GetChatClient(modelName)
                     .AsIChatClient())
-                .UseFunctionInvocation()
+                // .UseFunctionInvocation()
                 .UseOpenTelemetry()
                 .UseLogging(loggerFactory)
                 .Build();
         });
 
-        return services;
+        return cb;
     }
+
+    public static ChatClientBuilder UseSamplingReporter(this ChatClientBuilder builder)
+    {
+        return builder.Use((client) =>
+        {
+            return new SamplingReporter(client);
+        });
+    }        
 }

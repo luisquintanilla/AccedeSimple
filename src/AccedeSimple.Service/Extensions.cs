@@ -7,6 +7,7 @@ using Microsoft.SemanticKernel;
 using AccedeSimple.Domain;
 using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
+using AccedeConcierge.Service;
 
 public static class Extensions
 {
@@ -45,7 +46,7 @@ public static class Extensions
             // Handle admin approval
             processBuilder
                 .OnInputEvent(nameof(ApprovalStep.HandleApprovalResponseAsync))
-                .SendEventTo(new (approvalStep, nameof(ApprovalStep.HandleApprovalResponseAsync)));
+                .SendEventTo(new(approvalStep, nameof(ApprovalStep.HandleApprovalResponseAsync)));
 
             // Process receipts
             processBuilder
@@ -72,7 +73,8 @@ public static class Extensions
 
             McpClientOptions mcpClientOptions = new()
             {
-                ClientInfo = new (){
+                ClientInfo = new()
+                {
                     Name = "AspNetCoreSseClient",
                     Version = "1.0.0"
                 }
@@ -82,10 +84,11 @@ public static class Extensions
             var name = $"services__{serviceName}__http__0";
             var url = Environment.GetEnvironmentVariable(name) + "/sse";
 
-            var clientTransport = new SseClientTransport(new (){
+            var clientTransport = new SseClientTransport(new()
+            {
                 Name = "AspNetCoreSse",
                 Endpoint = new Uri(url)
-            },loggerFactory);
+            }, loggerFactory);
 
             // Not ideal pattern but should be enough to get it working.
             var mcpClient = McpClientFactory.CreateAsync(clientTransport, mcpClientOptions, loggerFactory).GetAwaiter().GetResult();
@@ -93,7 +96,15 @@ public static class Extensions
             return mcpClient;
         });
 
-        return services;        
+        return services;
     }
+
+    public static ChatClientBuilder UseSamplingReporter(this ChatClientBuilder builder, string path)
+    {
+        return builder.Use((client) =>
+        {
+            return new SamplingReporter(client, path);
+        });
+    }    
 }
 #pragma warning restore

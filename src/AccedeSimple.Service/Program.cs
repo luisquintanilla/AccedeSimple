@@ -51,10 +51,12 @@ builder.Services.AddMcpClient();
 
 var kernel = builder.Services.AddKernel();
 
-kernel.Services.AddChatClient(modelName: "gpt-4o-mini");
+kernel.Services.AddChatClient(modelName: "gpt-4o-mini")
+    .UseFunctionInvocation()
+    .UseSamplingReporter(Path.GetFullPath(Path.Combine(".","reporting")));
 
-kernel.Services.AddTransient<ProcessService>();
-kernel.Services.AddTransient<MessageService>();
+builder.Services.AddTransient<ProcessService>();
+builder.Services.AddTransient<MessageService>();
 
 builder.Services.AddTravelProcess();
 
