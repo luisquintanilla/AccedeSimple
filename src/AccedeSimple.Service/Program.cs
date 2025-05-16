@@ -26,7 +26,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient("LocalGuide", c =>
     {
-        c.BaseAddress = new Uri("http://localhost:8000");
+        c.BaseAddress = new Uri("http://localguide");
     });
 
 // Load configuration
