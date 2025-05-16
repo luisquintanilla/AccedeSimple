@@ -52,6 +52,7 @@ public class ProcessService
                 };             
                 var localGuideRequest = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, builder.Uri));
                 var body = await localGuideRequest.Content.ReadAsStringAsync();
+                var sanitizedBody = body.Trim('"');
                 await _messageService.AddMessageAsync(new AssistantResponse(body), _userSettings.UserId);
                 break;
             case UserIntent.StartTravelPlanning:

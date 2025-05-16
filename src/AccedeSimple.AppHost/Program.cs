@@ -28,13 +28,14 @@ var mcpServer =
     builder.AddProject<Projects.AccedeSimple_MCPServer>("mcpserver")
         .WithReference(openai)
         .WaitFor(openai);
-    
 
-var pythonApp = 
+
+var pythonApp =
     builder.AddPythonApp("localguide", "../localguide", "main.py")
         .WithHttpEndpoint(env: "PORT", port: 8000, isProxied: false)
         .WithEnvironment("OPENAI_API_KEY", Environment.GetEnvironmentVariable("OPENAI_API_KEY"))
-        .WithOtlpExporter();
+        .WithOtlpExporter()
+        .WithEnvironment("OTEL_EXPORTER_OTLP_INSECURE", "true");
     // .PublishAsDockerFile();
 
 var backend = 
