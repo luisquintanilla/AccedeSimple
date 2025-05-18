@@ -10,6 +10,7 @@ const loadingIndicatorId = 'loading-indicator';
 
 const App: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
+
     const [prompt, setPrompt] = useState<string>('');
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -20,18 +21,18 @@ const App: React.FC = () => {
     const chatService = ChatService.getInstance('/api');
 
     // Fetch chat history on load
-    useEffect(() => {
-        (async () => {
-            try {
-                const chatHistory = await chatService.getChat();
-                if (chatHistory) {
-                    setMessages(chatHistory as Message[]);
-                }
-            } catch (error) {
-                console.error('Error fetching chat history:', error);
-            }
-        })();
-    }, [chatService]);
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             const chatHistory = await chatService.getChat();
+    //             if (chatHistory) {
+    //                 setMessages(chatHistory as Message[]);
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching chat history:', error);
+    //         }
+    //     })();
+    // }, [chatService]);
 
     useEffect(() => {
         if (abortControllerRef.current) {
@@ -247,6 +248,15 @@ const App: React.FC = () => {
         chatService.cancelChat();
     };
 
+    const handleClearChat = async () => {
+        try {
+            await chatService.clearMessages("terry-carnation");
+            setMessages([]);
+        } catch (error) {
+            console.error('Error clearing chat messages:', error);
+        }
+    };
+
     // Function to handle itinerary selection
     const selectItinerary = async (messageId: string, optionId: string) => {
         try {
@@ -281,6 +291,7 @@ const App: React.FC = () => {
                         prompt={prompt}
                         setPrompt={setPrompt}
                         handleSubmit={handleSubmit}
+                        handleClearChat={handleClearChat}
                         cancelChat={cancelChat}
                         streamingMessageId={streamingMessageId}
                         messagesEndRef={messagesEndRef}

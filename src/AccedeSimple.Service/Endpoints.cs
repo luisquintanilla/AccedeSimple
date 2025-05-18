@@ -200,6 +200,26 @@ public static class Endpoints
         });
 
         
+        group.MapPost("/messages/clear", async (
+            [FromKeyedServices("history")] ConcurrentDictionary<string, List<ChatItem>> history,
+            [FromQuery] string? userId) =>
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Results.BadRequest("User ID is required");
+            }
+
+            // Clear history for the specified user ID
+            if (history.TryRemove(userId, out _))
+            {
+                return Results.Ok("History cleared");
+            }
+            else
+            {
+                return Results.NotFound("No history found for the specified user ID");
+            }
+        });
+
         // Select an itinerary option
         group.MapPost("/select-itinerary", async (
             [FromServices] MessageService messageService,
