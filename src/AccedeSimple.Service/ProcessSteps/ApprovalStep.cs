@@ -4,24 +4,29 @@ using Microsoft.Extensions.AI;
 using Microsoft.SemanticKernel;
 using AccedeSimple.Domain;
 using System.ComponentModel;
+using AccedeSimple.Service.Services;
+using Microsoft.Extensions.Options;
 
 namespace AccedeSimple.Service.ProcessSteps;
 
 public class ApprovalStep : KernelProcessStep
 {
     private StateStore _state = new();
+    private readonly UserSettings _userSettings;
     private readonly IList<TripRequest> _requests;
-    private readonly ChatStream _chatStream;
+    private readonly MessageService _messageService;
     private readonly IChatClient _chatClient;
 
     public ApprovalStep(
-        IChatClient _chatClient, 
-        ChatStream chatStream, 
+        IChatClient _chatClient,
+        MessageService messageService,
+        IOptions<UserSettings> userSettings,
         StateStore state)
     {
         _chatClient = _chatClient;
-        _chatStream = chatStream;
+        _messageService = messageService;
         _state = state;
+        _userSettings = userSettings.Value;
 
     }
 
@@ -52,8 +57,6 @@ public class ApprovalStep : KernelProcessStep
         tripResponse.TryGetResult(out var tripRequest);
 
         _state.Set("trip-requests", new List<TripRequest> { tripRequest });
-        
-        await context.EmitEventAsync("RequestAdminApproval");
     }
             
 
@@ -74,17 +77,7 @@ public class ApprovalStep : KernelProcessStep
             _state.Set("trip-requests", requests);
         }
 
-        _chatStream.AddMessage(new TripRequestDecisionChatItem(result));
-
-        // Emit the result of the approval process
-        if(result.Status == TripRequestStatus.Approved)
-        {
-            await context.EmitEventAsync("TripRequestApproved");
-        }
-        else
-        {
-            await context.EmitEventAsync("TripRequestRejected");
-        }
+        await _messageService.AddMessageAsync(new TripRequestDecisionChatItem(result), _userSettings.UserId);
     }
 }
 #pragma warning restore
