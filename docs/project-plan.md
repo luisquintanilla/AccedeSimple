@@ -18,6 +18,6 @@
 - [ ] Add Evals (WIP)
 - [ ] Add RAG over Travel Policy Docs (WIP)
 - [X] Fix Python .NET requests
-- [ ] Add Python OTEL (WIP)
+- [X] Add Python OTEL
 - [X] Figure out state issue [#1](https://github.com/luisquintanilla/AccedeSimple/issues/1)
 - [ ] Set up persistent storage for state
