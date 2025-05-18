@@ -21,6 +21,8 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Collections.Concurrent;
 using AccedeSimple.Service.Services;
+using Microsoft.Extensions.VectorData;
+using Microsoft.SemanticKernel.Connectors.SqliteVec;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,14 +56,24 @@ builder.Services.AddMcpClient();
 
 var kernel = builder.Services.AddKernel();
 
-kernel.Services.AddChatClient(modelName: "gpt-4o-mini");
+kernel.Services
+    .AddChatClient(modelName: "gpt-4o-mini")
+    .UseFunctionInvocation();
 
+kernel.Services.AddEmbeddingGenerator(modelName: "text-embedding-3-small");
+kernel.Services.AddSqliteCollection<int, Document>("Documents", "Data Source=documents.db");
 kernel.Services.AddTransient<ProcessService>();
 kernel.Services.AddTransient<MessageService>();
+kernel.Services.AddTransient<SearchService>();
 
 builder.Services.AddTravelProcess();
 
 var app = builder.Build();
+
+var k = app.Services.GetRequiredService<Kernel>();
+var collection = k.GetRequiredService<IVectorStoreRecordCollection<int, Document>>("Documents");
+var IngestionService = new IngestionService(collection);
+await IngestionService.IngestAsync(Path.Combine(AppContext.BaseDirectory, "docs"));
 
 app.MapEndpoints();
 

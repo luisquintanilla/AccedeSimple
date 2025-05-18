@@ -19,7 +19,9 @@
     <PackageReference Include="Microsoft.SemanticKernel.Process.Core" Version="1.49.0-alpha" />
     <PackageReference Include="Microsoft.SemanticKernel.Process.LocalRuntime" Version="1.49.0-alpha" />
     <PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.13" />
+    <PackageReference Include="PdfPig" Version="0.1.9" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.50.0-preview" />
   </ItemGroup>
 
 

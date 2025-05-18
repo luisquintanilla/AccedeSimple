@@ -9,6 +9,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Microsoft.Extensions.AI;
 using Azure.AI.OpenAI;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -137,9 +138,9 @@ public static class Extensions
         return app;
     }
 
-    public static IServiceCollection AddChatClient(this IServiceCollection services, string modelName)
+    public static ChatClientBuilder AddChatClient(this IServiceCollection services, string modelName)
     {
-        services.AddChatClient(sp =>
+        var cb = services.AddChatClient(sp =>
         {
             var loggerFactory = sp.GetRequiredService<ILoggerFactory>() ?? throw new InvalidOperationException("ILoggerFactory is not registered.");
             var azureOpenAIClient = sp.GetRequiredService<AzureOpenAIClient>() ?? throw new InvalidOperationException("AzureOpenAIClient is not registered.");
@@ -147,12 +148,31 @@ public static class Extensions
                 azureOpenAIClient
                     .GetChatClient(modelName)
                     .AsIChatClient())
-                .UseFunctionInvocation()
+                // .UseFunctionInvocation()
                 .UseOpenTelemetry()
                 .UseLogging(loggerFactory)
                 .Build();
         });
 
-        return services;
+        return cb;
+    }
+
+    public static EmbeddingGeneratorBuilder<string,Embedding<float>> AddEmbeddingGenerator(this IServiceCollection services, string modelName)
+    {
+        var eb = services.AddEmbeddingGenerator(sp =>
+        {
+            var loggerFactory = sp.GetRequiredService<ILoggerFactory>() ?? throw new InvalidOperationException("ILoggerFactory is not registered.");
+            var azureOpenAIClient = sp.GetRequiredService<AzureOpenAIClient>() ?? throw new InvalidOperationException("AzureOpenAIClient is not registered.");
+
+            return new EmbeddingGeneratorBuilder<string, Embedding<float>>(
+                azureOpenAIClient
+                    .GetEmbeddingClient(modelName)
+                    .AsIEmbeddingGenerator())
+                .UseOpenTelemetry()
+                .UseLogging()
+                .Build();
+        });
+
+        return eb;
     }
 }

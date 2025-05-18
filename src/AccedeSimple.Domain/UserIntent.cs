@@ -11,6 +11,9 @@ public enum UserIntent
     [Description("Ask about attractions or activities in a specific location")]
     AskLocalGuide,
 
+    [Description("Request information about travel policies or guidelines (i.e. per diem, travel class, reimbursement)")]
+    AskPolicyQuestions,
+
     [Description("Request for travel planning and find trip options")]
     StartTravelPlanning,
     

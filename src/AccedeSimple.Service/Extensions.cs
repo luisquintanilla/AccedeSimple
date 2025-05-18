@@ -30,6 +30,7 @@ public static class Extensions
             var approvalStep = processBuilder.AddStepFromType<ApprovalStep>("ApprovalStep");
             var receiptStep = processBuilder.AddStepFromType<ReceiptProcessingStep>("ReceiptProcessingStep");
             var expenseReportStep = processBuilder.AddStepFromType<ExpenseReportStep>("ExpenseReportStep");
+            var policyInquiryStep = processBuilder.AddStepFromType<PolicyInquiryStep>("PolicyInquiryStep");
 
             // Start travel planning when a new request comes in
             processBuilder
@@ -56,6 +57,11 @@ public static class Extensions
             processBuilder
                 .OnInputEvent(nameof(ExpenseReportStep.GenerateExpenseReportAsync))
                 .SendEventTo(new(expenseReportStep, nameof(ExpenseReportStep.GenerateExpenseReportAsync)));
+
+            // Handle policy inquiries
+            processBuilder
+                .OnInputEvent(nameof(PolicyInquiryStep.ProcessPolicyInquiryAsync))
+                .SendEventTo(new(policyInquiryStep, nameof(PolicyInquiryStep.ProcessPolicyInquiryAsync), "userInput"));
 
             return processBuilder.Build();
         });
