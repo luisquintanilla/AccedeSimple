@@ -42,7 +42,7 @@ public class ExpenseReportStep : KernelProcessStep
             Description: r.Description,
             Amount: r.Amount,
             Category: r.Category,
-            Date: r.Date,
+            Date: r.Date ?? DateTime.Now,
             ReceiptReference: r.Id,
             Notes: null
         )).ToList();

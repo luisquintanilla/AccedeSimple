@@ -14,7 +14,7 @@ builder.Services.AddMcpServer()
     .WithHttpTransport()
     .WithToolsFromAssembly();
 
-builder.Services.AddChatClient(modelName: "gpt-4o-mini");
+builder.Services.AddChatClient(modelName: Environment.GetEnvironmentVariable("MODEL_NAME") ?? "gpt-4o-mini");
 
 var app = builder.Build();
 

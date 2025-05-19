@@ -7,6 +7,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 var azureOpenAIResource = builder.AddParameterFromConfiguration("AzureOpenAIResourceName", "AzureOpenAI:ResourceName");
 var azureOpenAIResourceGroup = builder.AddParameterFromConfiguration("AzureOpenAIResourceGroup","AzureOpenAI:ResourceGroup");
 var azureOpenAIEndpoint = builder.AddParameterFromConfiguration("AzureOpenAIEndpoint", "AzureOpenAI:Endpoint");
+var modelName = "gpt-4.1";
+
 
 // Configure Azure Services
 var azureStorage = builder.AddAzureStorage("storage");
@@ -23,26 +25,29 @@ if (builder.Environment.IsDevelopment())
 }
 
 // Configure projects
-var mcpServer = 
+var mcpServer =
     builder.AddProject<Projects.AccedeSimple_MCPServer>("mcpserver")
         .WithReference(openai)
+        .WithEnvironment("MODEL_NAME", modelName)
         .WaitFor(openai);
-    
+
 
 var pythonApp =
     builder.AddPythonApp("localguide", "../localguide", "main.py")
         .WithHttpEndpoint(env: "PORT", port: 8000, isProxied: false)
         .WithEnvironment("AZURE_OPENAI_ENDPOINT", azureOpenAIEndpoint)
-        .WaitFor(openai)
-        .WithOtlpExporter();
+        .WithEnvironment("MODEL_NAME", modelName)
+        .WithOtlpExporter()
+        .WaitFor(openai);
 
-var backend = 
+var backend =
     builder
         .AddProject<Projects.AccedeSimple_Service>("backend")
         .WithReference(openai)
         .WithReference(mcpServer)
         .WithReference(pythonApp)
         .WithReference(azureStorage.AddBlobs("uploads"))
+        .WithEnvironment("MODEL_NAME", modelName)
         .WaitFor(openai);
 
 builder.AddNpmApp("webui", "../webui")

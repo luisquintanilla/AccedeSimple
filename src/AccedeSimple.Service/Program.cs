@@ -57,7 +57,7 @@ builder.Services.AddMcpClient();
 var kernel = builder.Services.AddKernel();
 
 kernel.Services
-    .AddChatClient(modelName: "gpt-4o-mini")
+    .AddChatClient(modelName: Environment.GetEnvironmentVariable("MODEL_NAME") ?? "gpt-4o-mini")
     .UseFunctionInvocation();
 
 kernel.Services.AddEmbeddingGenerator(modelName: "text-embedding-3-small");
