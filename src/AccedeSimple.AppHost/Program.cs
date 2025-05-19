@@ -40,6 +40,10 @@ var pythonApp =
         .WithOtlpExporter()
         .WaitFor(openai);
 
+var azureSubscriptionId = builder.AddParameterFromConfiguration("AzureSubscriptionId", "Azure:SubscriptionId");
+var azureResourceGroup = builder.AddParameterFromConfiguration("AzureResourceGroup", "Azure:ResourceGroup");
+var azureAIFoundryProject = builder.AddParameterFromConfiguration("AzureAIFoundryProject", "AzureAIFoundry:Project");
+
 var backend =
     builder
         .AddProject<Projects.AccedeSimple_Service>("backend")
@@ -48,6 +52,9 @@ var backend =
         .WithReference(pythonApp)
         .WithReference(azureStorage.AddBlobs("uploads"))
         .WithEnvironment("MODEL_NAME", modelName)
+        .WithEnvironment("AZURE_SUBSCRIPTION_ID", azureSubscriptionId)
+        .WithEnvironment("AZURE_RESOURCE_GROUP", azureOpenAIResourceGroup)
+        .WithEnvironment("AZURE_AI_FOUNDRY_PROJECT", azureAIFoundryProject)
         .WaitFor(openai);
 
 builder.AddNpmApp("webui", "../webui")

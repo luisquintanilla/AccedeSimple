@@ -15,7 +15,6 @@ using Microsoft.Extensions.Hosting;
 using AccedeSimple.Service;
 using Microsoft.AspNetCore.Mvc;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
 using Microsoft.AspNetCore.Http.Features;
 using System.Text.Json.Serialization;
 using System.Text.Json;

@@ -6,7 +6,6 @@ using AccedeSimple.Service.ProcessSteps;
 using Microsoft.SemanticKernel;
 using AccedeSimple.Domain;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
 
 public static class Extensions
 {
