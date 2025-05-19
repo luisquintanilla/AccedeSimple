@@ -86,6 +86,7 @@ interface ChatContainerProps {
     selectedFiles: File[];
     setSelectedFiles: (files: File[]) => void;
     selectItinerary?: (messageId: string, optionId: string) => void;
+    handleClearChat: () => void;
 }
 
 const ChatContainer: React.FC<ChatContainerProps> = ({
@@ -94,6 +95,7 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
     setPrompt,
     handleSubmit,
     cancelChat,
+    handleClearChat,
     streamingMessageId,
     messagesEndRef,
     shouldAutoScroll,
@@ -555,9 +557,14 @@ const ChatContainer: React.FC<ChatContainerProps> = ({
                             Stop
                         </button>
                     ) : (
-                        <button type="submit" disabled={streamingMessageId ? true : false} className="message-button">
-                            Send
-                        </button>
+                        <div className="button-group">
+                            <button type="submit" disabled={streamingMessageId ? true : false} className="message-button">
+                                Send
+                            </button>
+                            <button type="button" onClick={handleClearChat} className="message-button">
+                                Clear
+                            </button>
+                        </div>
                     )}
                 </form>
             </div>

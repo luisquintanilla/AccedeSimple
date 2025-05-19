@@ -31,6 +31,7 @@
 
 .message-button {
     padding: 10px 24px;
+    margin-left: 5px;
     border-radius: 8px;
     border: none;
     background: #3182ce;

@@ -8,6 +8,8 @@ using ModelContextProtocol.Client;
 using ModelContextProtocol.Protocol.Transport;
 using Microsoft.AspNetCore.Mvc;
 using Azure;
+using AccedeSimple.Service.Services;
+using Microsoft.Extensions.Options;
 
 namespace AccedeSimple.Service.ProcessSteps;
 
@@ -19,20 +21,24 @@ public class TravelPlanningStep : KernelProcessStep
     private readonly ILogger<TravelPlanningStep> _logger;
     private readonly IMcpClient _mcpClient;
 
-    private readonly ChatStream _chatStream;
+    private readonly MessageService _messageService;
+    
+    private readonly UserSettings _userSettings;
 
 
     public TravelPlanningStep(
-        ILogger<TravelPlanningStep> logger, 
-        IChatClient chatClient, 
-        IMcpClient mcpClient, 
-        ChatStream chatStream,
-        StateStore stateStore)
+        ILogger<TravelPlanningStep> logger,
+        IChatClient chatClient,
+        IMcpClient mcpClient,
+        MessageService messageService,
+        StateStore stateStore,
+        IOptions<UserSettings> userSettings)
     {
         _chatClient = chatClient;
         _logger = logger;
         _mcpClient = mcpClient;
-        _chatStream = chatStream;
+        _messageService = messageService;
+        _userSettings = userSettings.Value;
         _state = stateStore;
     }
 
@@ -86,6 +92,8 @@ public class TravelPlanningStep : KernelProcessStep
 
         var tools = await _mcpClient.ListToolsAsync();
 
+        await _messageService.AddMessageAsync(new TripRequestUpdated("Planning your trip..."), _userSettings.UserId);
+
         var response = await _chatClient.GetResponseAsync<List<TripOption>>(
             messages,
             new ChatOptions { 
@@ -99,14 +107,12 @@ public class TravelPlanningStep : KernelProcessStep
         _state.Set("trip-options", result);
 
         // Write the result to the chat stream
-        _chatStream.AddMessage(new CandidateItineraryChatItem("Here are trips matching your requirements.", result));
+        // _chatStream.AddMessage();
+        await _messageService.AddMessageAsync(
+            new CandidateItineraryChatItem("Here are trips matching your requirements.", result),
+            _userSettings.UserId);
 
         var options = result ?? [];
-
-        await context.EmitEventAsync(
-            "TripOptionsGenerated",
-            options,
-            KernelProcessEventVisibility.Public);
 
         return options;
     }
@@ -138,7 +144,10 @@ public class TravelPlanningStep : KernelProcessStep
         _state.Set("trip-requests", new List<TripRequest> { tripRequest });
 
         // Write the result to the chat stream
-        _chatStream.AddMessage(new AssistantResponse("Admin Approval Needed"));
+        // _chatStream.AddMessage(new AssistantResponse("Admin Approval Needed"));
+        await _messageService.AddMessageAsync(
+            new AssistantResponse("Trip request created. Awaiting admin approval."),
+            _userSettings.UserId);
 
         return tripRequest;
     }
