@@ -33,6 +33,7 @@ To run the application, ensure the following tools and frameworks are installed:
 - [Python 3.12 or greater](https://www.python.org/downloads/)
 - [UV](https://docs.astral.sh/uv/)
 - [Visual Studio Code](https://code.visualstudio.com/)
+- [Azure OpenAI Resource](https://learn.microsoft.com/azure/ai-services/openai/how-to/create-resource?pivots=web-portal) with the `gpt-4.1` model deployed and [permissions](https://learn.microsoft.com/azure/ai-services/openai/how-to/role-based-access-control).
 - [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-windows) (if applicable)
 
 ## Quick Start
