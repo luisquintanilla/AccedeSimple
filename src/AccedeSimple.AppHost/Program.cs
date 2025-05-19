@@ -19,6 +19,7 @@ if (builder.Environment.IsDevelopment())
 // Use existing resources
 var azureOpenAIResource = builder.AddParameterFromConfiguration("AzureOpenAIResourceName", "AzureOpenAI:ResourceName");
 var azureOpenAIResourceGroup = builder.AddParameterFromConfiguration("AzureOpenAIResourceGroup","AzureOpenAI:ResourceGroup");
+var azureOpenAIEndpoint = builder.AddParameterFromConfiguration("AzureOpenAIEndpoint", "AzureOpenAI:Endpoint");
 
 var openai = 
     builder.AddAzureOpenAI("openai")
@@ -30,10 +31,10 @@ var mcpServer =
         .WaitFor(openai);
     
 
-var pythonApp = 
+var pythonApp =
     builder.AddPythonApp("localguide", "../localguide", "main.py")
         .WithHttpEndpoint(env: "PORT", port: 8000, isProxied: false)
-        .WithEnvironment("OPENAI_API_KEY", Environment.GetEnvironmentVariable("OPENAI_API_KEY"))
+        .WithEnvironment("AZURE_OPENAI_ENDPOINT", azureOpenAIEndpoint)
         .WithOtlpExporter();
     // .PublishAsDockerFile();
 

@@ -66,6 +66,7 @@ To run the application, ensure the following tools and frameworks are installed:
    1. Set the following user secrets. i.e. `dotnet user-secrets set "AzureOpenAI:ResourceGroup" "YOUR-VALUE"`
       - **AzureOpenAI:ResourceGroup** - The name of your Azure Resource Group where the OpenAI Resource is deployed to
       - **AzureOpenAI:ResourceName** - The name of your Azure OpenAI Resource
+      - **AzureOpenAI:Endpoint** - The endpoint for youor Azure OpenAI Resource
       - **Azure:SubscriptionId** - The subscription ID you deployed your resources to 
       - **Azure:ResourceGroup** - The name of your Azure OpenAI Resource is deployed to.
       - **Azure:Location** - The location you deployed your Azure OpenAI Resource to.
