@@ -169,7 +169,7 @@ public static class Extensions
                     .GetEmbeddingClient(modelName)
                     .AsIEmbeddingGenerator())
                 .UseOpenTelemetry()
-                .UseLogging()
+                .UseLogging(loggerFactory)
                 .Build();
         });
 

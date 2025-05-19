@@ -13,21 +13,28 @@
     <PackageReference Include="Azure.AI.OpenAI" Version="2.2.0-beta.4" />
     <PackageReference Include="Azure.Identity" Version="1.14.0-beta.4" />
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.AI" Version="9.4.4-preview.1.25259.16" />
-    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.4.4-preview.1.25259.16" />
+    <PackageReference Include="Microsoft.Extensions.AI" Version="9.5.0" />
+    <PackageReference Include="Microsoft.Extensions.AI.OpenAI" Version="9.5.0-preview.1.25265.7" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
     <PackageReference Include="Microsoft.SemanticKernel.Process.Core" Version="1.49.0-alpha" />
     <PackageReference Include="Microsoft.SemanticKernel.Process.LocalRuntime" Version="1.49.0-alpha" />
-    <PackageReference Include="ModelContextProtocol" Version="0.1.0-preview.13" />
+    <PackageReference Include="ModelContextProtocol" Version="0.2.0-preview.1" />
     <PackageReference Include="PdfPig" Version="0.1.9" />
     <PackageReference Include="System.Reactive" Version="6.0.1" />
-    <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.50.0-preview" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.SqliteVec" Version="1.52.0-preview" />
+    <PackageReference Include="Microsoft.Extensions.VectorData.Abstractions" Version="9.5.0" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\AccedeSimple.Domain\AccedeSimple.Domain.csproj" />
     <ProjectReference Include="..\AccedeSimple.ServiceDefaults\AccedeSimple.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="docs\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

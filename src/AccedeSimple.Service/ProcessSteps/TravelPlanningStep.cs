@@ -5,7 +5,6 @@ using Microsoft.SemanticKernel;
 using AccedeSimple.Domain;
 using System.ComponentModel;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
 using Microsoft.AspNetCore.Mvc;
 using Azure;
 using AccedeSimple.Service.Services;

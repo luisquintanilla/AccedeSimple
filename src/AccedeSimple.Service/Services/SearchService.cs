@@ -5,8 +5,8 @@ namespace AccedeSimple.Service.Services;
 
 public class SearchService
 {
-    private readonly IVectorStoreRecordCollection<int, Document> _collection;
-    public SearchService(IVectorStoreRecordCollection<int, Document> collection)
+    private readonly VectorStoreCollection<int, Document> _collection;
+    public SearchService(VectorStoreCollection<int, Document> collection)
     {
         _collection = collection;
     }

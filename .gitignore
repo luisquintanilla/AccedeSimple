@@ -3,9 +3,11 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Ingestion
+documents.db
+
 # Azure
 .azure
-
 
 **/.azurite/**/*
 **/.azure/**/*

@@ -1,8 +1,5 @@
-using System.Collections.ObjectModel;
 using Microsoft.Extensions.VectorData;
-using Microsoft.SemanticKernel.Connectors.SqliteVec;
 using Microsoft.SemanticKernel.Text;
-using ModelContextProtocol.Protocol.Types;
 using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.PageSegmenter;
@@ -12,15 +9,15 @@ namespace AccedeSimple.Service.Services;
 
 public class IngestionService
 {
-    private readonly IVectorStoreRecordCollection<int, Document> _collection;
-    public IngestionService(IVectorStoreRecordCollection<int, Document> collection)
+    private readonly VectorStoreCollection<int, Document> _collection;
+    public IngestionService(VectorStoreCollection<int, Document> collection)
     {
         _collection = collection;
     }
 
     public async Task IngestAsync(string sourceDirectory)
     {
-        await _collection.CreateCollectionIfNotExistsAsync();
+        await _collection.EnsureCollectionExistsAsync();
         var sourceFiles = Directory.GetFiles(sourceDirectory, "*.pdf");
         foreach (var file in sourceFiles)
         {
@@ -63,18 +60,18 @@ public class IngestionService
 
 public record class Document
 {
-    [VectorStoreRecordKey]
+    [VectorStoreKey]
     public int Id { get; set; }
 
-    [VectorStoreRecordData]
+    [VectorStoreData]
     public string FileName { get; set; }
 
-    [VectorStoreRecordData]
+    [VectorStoreData]
     public int PageNumber { get; set; }
 
-    [VectorStoreRecordData]
+    [VectorStoreData]
     public int IndexOnPage { get; set; }
 
-    [VectorStoreRecordVector(Dimensions: 1536)]
+    [VectorStoreVector(Dimensions: 1536)]
     public string? Embedding { get; set; }
 }

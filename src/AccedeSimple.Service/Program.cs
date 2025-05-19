@@ -15,7 +15,6 @@ using Microsoft.Extensions.Hosting;
 using AccedeSimple.Service;
 using Microsoft.AspNetCore.Mvc;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
 using Microsoft.AspNetCore.Http.Features;
 using System.Text.Json.Serialization;
 using System.Text.Json;
@@ -71,7 +70,7 @@ builder.Services.AddTravelProcess();
 var app = builder.Build();
 
 var k = app.Services.GetRequiredService<Kernel>();
-var collection = k.GetRequiredService<IVectorStoreRecordCollection<int, Document>>("Documents");
+var collection = k.GetRequiredService<VectorStoreCollection<int, Document>>();
 var IngestionService = new IngestionService(collection);
 await IngestionService.IngestAsync(Path.Combine(AppContext.BaseDirectory, "docs"));
 

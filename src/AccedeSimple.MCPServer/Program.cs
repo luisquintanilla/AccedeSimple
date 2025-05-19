@@ -3,8 +3,6 @@ using AccedeSimple.Domain;
 using ModelContextProtocol.Server;
 using Microsoft.Extensions.AI;
 using Microsoft.AspNetCore.Mvc;
-using ModelContextProtocol.Protocol.Types;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
