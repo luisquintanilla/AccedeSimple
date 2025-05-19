@@ -92,6 +92,8 @@ public class TravelPlanningStep : KernelProcessStep
 
         var tools = await _mcpClient.ListToolsAsync();
 
+        await _messageService.AddMessageAsync(new TripRequestUpdated("Planning your trip..."), _userSettings.UserId);
+
         var response = await _chatClient.GetResponseAsync<List<TripOption>>(
             messages,
             new ChatOptions { 

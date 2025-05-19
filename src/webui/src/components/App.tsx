@@ -21,18 +21,18 @@ const App: React.FC = () => {
     const chatService = ChatService.getInstance('/api');
 
     // Fetch chat history on load
-    // useEffect(() => {
-    //     (async () => {
-    //         try {
-    //             const chatHistory = await chatService.getChat();
-    //             if (chatHistory) {
-    //                 setMessages(chatHistory as Message[]);
-    //             }
-    //         } catch (error) {
-    //             console.error('Error fetching chat history:', error);
-    //         }
-    //     })();
-    // }, [chatService]);
+    useEffect(() => {
+        (async () => {
+            try {
+                const chatHistory = await chatService.getChat();
+                if (chatHistory) {
+                    setMessages(chatHistory as Message[]);
+                }
+            } catch (error) {
+                console.error('Error fetching chat history:', error);
+            }
+        })();
+    }, [chatService]);
 
     useEffect(() => {
         if (abortControllerRef.current) {

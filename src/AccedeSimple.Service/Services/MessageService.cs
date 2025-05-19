@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using Microsoft.Extensions.AI;
 
 namespace AccedeSimple.Service.Services;
 
@@ -8,7 +7,9 @@ public class MessageService
     private readonly ChatStream _chatStream;
     private readonly ConcurrentDictionary<string, List<ChatItem>> _history;
 
-    public MessageService(ChatStream chatStream, [FromKeyedServices("history")] ConcurrentDictionary<string, List<ChatItem>> history)
+    public MessageService(
+        ChatStream chatStream,
+        [FromKeyedServices("history")] ConcurrentDictionary<string, List<ChatItem>> history)
     {
         _chatStream = chatStream;
         _history = history;
