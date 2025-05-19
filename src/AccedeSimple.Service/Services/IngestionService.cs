@@ -20,8 +20,6 @@ public class IngestionService
         await _collection.EnsureCollectionExistsAsync();
         var sourceFiles = Directory.GetFiles(sourceDirectory, "*.pdf");
 
-        var docs = new List<Document>();
-
         foreach (var file in sourceFiles)
         {
             using var pdf = PdfDocument.Open(Path.Combine(sourceDirectory, file));
@@ -42,7 +40,7 @@ public class IngestionService
                     })
                     .ToList();
 
-            await _collection.UpsertAsync(docs);
+            await _collection.UpsertAsync(documents);
         }
     }
 
