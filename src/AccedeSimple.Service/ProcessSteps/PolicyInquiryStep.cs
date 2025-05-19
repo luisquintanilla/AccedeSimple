@@ -46,13 +46,18 @@ public class PolicyInquiryStep : KernelProcessStep
         var policyInquiryPrompt =
             $"""
             Process the policy inquiry.
+
+            Only use the search results to answer the user's question. 
+            
+            Do not provide any additional information or context.
+            
             Provide a summary of the policy based on the following information:
             
             # Policy Inquiry
             {input.Text}
 
             # Search Results
-            {string.Join(Environment.NewLine, results.Select(r => $"* {r.Embedding}"))}
+            {string.Join(Environment.NewLine, results.Select(r => $"* {r.Text}"))}
             """;
 
         var policyResponse = await _chatClient.GetResponseAsync(policyInquiryPrompt);

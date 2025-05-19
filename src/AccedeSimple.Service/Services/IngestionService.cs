@@ -35,6 +35,7 @@ public class IngestionService
                             FileName = Path.GetFileName(file),
                             PageNumber = p.PageNumber,
                             IndexOnPage = p.IndexOnPage,
+                            Text = p.Text,
                             Embedding = p.Text
                         };
                     })
@@ -73,6 +74,9 @@ public record class Document
 
     [VectorStoreData]
     public int IndexOnPage { get; set; }
+
+    [VectorStoreData]
+    public string? Text { get; set; }
 
     [VectorStoreVector(Dimensions: 1536)]
     public string? Embedding { get; set; }
