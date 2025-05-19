@@ -23,12 +23,19 @@ public class ChatStream
     }
 }
 
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")]
+[JsonDerivedType(typeof(UserMessage), "user")]
+[JsonDerivedType(typeof(AssistantResponse), "assistant")]
+[JsonDerivedType(typeof(CandidateItineraryChatItem), "candidate-itineraries")]
+[JsonDerivedType(typeof(TripRequestUpdated), "trip-request-updated")]
+[JsonDerivedType(typeof(ItinerarySelectedChatItem), "itinerary-selected")]
+[JsonDerivedType(typeof(TripRequestDecisionChatItem), "trip-approval-result")]
 public abstract class ChatItem(string text)
 {
 
     public string Text { get; init; } = text;
 
-    public string Id { get; init; }
+    public string? Id { get; init; }
 
     public abstract ChatRole Role { get; }
 
@@ -79,19 +86,27 @@ public sealed class UserMessage(string text) : ChatItem(text)
 
 
 // Assistant messages
-public class AssistantResponse(string text) : ChatItem(text)
+public class AssistantResponse : ChatItem
 {
+    [SetsRequiredMembers]
+    public AssistantResponse(string text) : base(text)
+    {
+        var id = Guid.NewGuid().ToString();
+        Id = id;
+        ResponseId = id;
+    }
+
     public override string Type => "assistant";
 
     public string? ResponseId { get; set; }
-    public bool IsFinal { get; set; }
+    public bool IsFinal { get; set; } = true;
     public override ChatRole Role => ChatRole.Assistant;
     public override bool IsUserVisible => true;
 }
 
 
 // Candidate itinerary messages
-internal sealed class CandidateItineraryChatItem : ChatItem
+public class CandidateItineraryChatItem : ChatItem
 {
     [SetsRequiredMembers]
     public CandidateItineraryChatItem(string text, List<TripOption> options) : base(text)
@@ -129,20 +144,26 @@ public sealed class TripRequestUpdated(string text) : ChatItem(text)
 public class ItinerarySelectedChatItem(string text) : ChatItem(text)
 {
     public required string MessageId { get; init; }
-    
+
     public required string OptionId { get; init; }
 
     public override string Type => "itinerary-selected";
     public override ChatRole Role => ChatRole.User;
     public override bool IsUserVisible => false;
-    public override ChatMessage? ToChatMessage() => 
+    public override ChatMessage? ToChatMessage() =>
         new ChatMessage(ChatRole.User, $"I've selected itinerary option {OptionId}.");
 }
 
 // Trip request result messages
-public class TripRequestDecisionChatItem(TripRequestResult result) : ChatItem(GetTextForStatus(result.Status))
+public class TripRequestDecisionChatItem : ChatItem
 {
-    public TripRequestResult Result { get; } = result;
+    [SetsRequiredMembers]
+    public TripRequestDecisionChatItem(TripRequestResult result) : base(GetTextForStatus(result.Status))
+    {
+        Id = Guid.NewGuid().ToString();
+        Result = result;
+    }
+    public TripRequestResult Result { get; }
     public override string Type => "trip-approval-result";
     public override ChatRole Role => ChatRole.Assistant;
     public override bool IsUserVisible => true;

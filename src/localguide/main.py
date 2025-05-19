@@ -3,7 +3,13 @@ import uvicorn
 from pydantic import BaseModel
 from pydantic_ai import Agent
 from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.providers.openai import OpenAIProvider
 import os
+from openai import AsyncAzureOpenAI
+from azure.identity import (
+    DefaultAzureCredential,
+    get_bearer_token_provider
+)
 
 # Define Pydantic models
 class Attraction(BaseModel):
@@ -26,7 +32,16 @@ async def root():
     return {"message": "FastAPI is running"}
 
 # Initialize the Agent
-model = OpenAIModel('gpt-4o')
+azure_credential = DefaultAzureCredential()
+token_provider = get_bearer_token_provider(azure_credential, "https://cognitiveservices.azure.com/.default")
+
+client = AsyncAzureOpenAI(
+    azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT"),
+    azure_ad_token_provider=token_provider,
+    api_version="2024-06-01"
+)
+
+model = OpenAIModel('gpt-4.1', provider=OpenAIProvider(openai_client=client))
 agent = Agent(model, 
               output_type=CityAttractions,
               system_prompt="You are an expert local guide. Provide detailed information about attractions in the specified city.")

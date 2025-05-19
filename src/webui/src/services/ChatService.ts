@@ -177,6 +177,16 @@ class ChatService {
             throw new Error(`Error selecting itinerary: ${errorMessage}`);
         }
     }
-}
 
+    async clearMessages(userId: string): Promise<void> {
+        const response = await fetch(`${this.backendUrl}/chat/messages/clear?userId=${userId}`, {
+            method: 'POST',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to clear messages');
+        }
+    }
+
+}
 export default ChatService;

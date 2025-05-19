@@ -129,7 +129,7 @@ const AdminPage: React.FC = () => {
                                                     <div key={index} className="flight-item">
                                                         <div className="flight-header">
                                                             <span className="flight-number">{flight.airline} {flight.flightNumber}</span>
-                                                            <span className="flight-date">{formatDate(flight.departureTime)}</span>
+                                                            <span className="flight-date">{formatDate(flight.departureDateTime)}</span>
                                                         </div>
                                                         <div className="flight-route">
                                                             <span className="flight-origin">{flight.origin}</span>
@@ -137,7 +137,7 @@ const AdminPage: React.FC = () => {
                                                             <span className="flight-destination">{flight.destination}</span>
                                                         </div>
                                                         <div className="flight-details">
-                                                            <span className="flight-time">Departure: {new Date(flight.departureTime).toLocaleTimeString()}</span>
+                                                            <span className="flight-time">Departure: {new Date(flight.departureDateTime).toLocaleTimeString()}</span>
                                                             <span className="flight-duration">{flight.duration}</span>
                                                             <span className="flight-price">{formatCurrency(flight.price)}</span>
                                                         </div>
@@ -149,7 +149,7 @@ const AdminPage: React.FC = () => {
                                                 <>
                                                     <h5>Hotel</h5>
                                                     <div className="hotel-details">
-                                                        <div className="hotel-name">{selectedRequest.tripOption.hotel.propertyName}</div>
+                                                        <div className="hotel-name">{selectedRequest.tripOption.hotel.hotelName}</div>
                                                         <div className="hotel-address">{selectedRequest.tripOption.hotel.address}</div>
                                                         <div className="hotel-dates">
                                                             Check-in: {formatDate(selectedRequest.tripOption.hotel.checkIn)} | 
@@ -158,7 +158,7 @@ const AdminPage: React.FC = () => {
                                                         <div className="hotel-room">{selectedRequest.tripOption.hotel.roomType}</div>
                                                         <div className="hotel-price">
                                                             {formatCurrency(selectedRequest.tripOption.hotel.pricePerNight)} per night × 
-                                                            {selectedRequest.tripOption.hotel.nightCount} nights = 
+                                                            {selectedRequest.tripOption.hotel.numberOfNights} nights = 
                                                             {formatCurrency(selectedRequest.tripOption.hotel.totalPrice)}
                                                         </div>
                                                     </div>
@@ -172,8 +172,8 @@ const AdminPage: React.FC = () => {
                                                         <div className="car-company">{selectedRequest.tripOption.car.company}</div>
                                                         <div className="car-type">{selectedRequest.tripOption.car.carType}</div>
                                                         <div className="car-dates">
-                                                            Pickup: {formatDate(selectedRequest.tripOption.car.pickupTime)} at {selectedRequest.tripOption.car.pickupLocation} | 
-                                                            Return: {formatDate(selectedRequest.tripOption.car.dropoffTime)} at {selectedRequest.tripOption.car.dropoffLocation}
+                                                            Pickup: {formatDate(selectedRequest.tripOption.car.pickupDateTime)} at {selectedRequest.tripOption.car.pickupLocation} | 
+                                                            Return: {formatDate(selectedRequest.tripOption.car.dropoffDateTime)} at {selectedRequest.tripOption.car.dropoffLocation}
                                                         </div>
                                                         <div className="car-price">
                                                             {formatCurrency(selectedRequest.tripOption.car.dailyRate)} per day = 

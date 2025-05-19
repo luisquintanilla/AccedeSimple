@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
+using OpenTelemetry.Trace;
 using TextContent = Microsoft.Extensions.AI.TextContent;
 
 namespace AccedeSimple.Service;
@@ -62,7 +63,7 @@ public static class Endpoints
         {
             try
             {
-                await process.StartAsync(kernel, new KernelProcessEvent {Id = nameof(ApprovalStep.HandleApprovalResponseAsync), Data = result});
+                await process.StartAsync(kernel, new KernelProcessEvent { Id = nameof(ApprovalStep.HandleApprovalResponseAsync), Data = result });
                 return Results.Ok();
             }
             catch (Exception ex)
@@ -184,12 +185,9 @@ public static class Endpoints
             }
 
             var visibleMessages = messages.Where(m => m.IsUserVisible).ToList();
-            foreach (var message in visibleMessages)
-            {
-                chatStream.AddMessage(message);
-            }
-
+            
             return Results.Ok(visibleMessages);
+
         });
 
         group.MapPost("/stream/cancel", async () =>
@@ -200,6 +198,26 @@ public static class Endpoints
         });
 
         
+        group.MapPost("/messages/clear", async (
+            [FromKeyedServices("history")] ConcurrentDictionary<string, List<ChatItem>> history,
+            [FromQuery] string? userId) =>
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Results.BadRequest("User ID is required");
+            }
+
+            // Clear history for the specified user ID
+            if (history.TryRemove(userId, out _))
+            {
+                return Results.Ok("History cleared");
+            }
+            else
+            {
+                return Results.NotFound("No history found for the specified user ID");
+            }
+        });
+
         // Select an itinerary option
         group.MapPost("/select-itinerary", async (
             [FromServices] MessageService messageService,
@@ -252,8 +270,8 @@ public static class Endpoints
 
     private static async Task HandleMessageAsync(ChatItem chatItem, HttpResponse response, CancellationToken cancellationToken)
     {
-        try 
-        {        
+        try
+        {
 
             // Handle the message based on its type
             if (chatItem is AssistantResponse assistantResponse)
@@ -269,12 +287,26 @@ public static class Endpoints
                 await response.WriteAsync($"data: {serializedMessage}\n\n", cancellationToken);
                 await response.Body.FlushAsync(cancellationToken);
             }
+            else if (chatItem is TripRequestUpdated tripRequestUpdated)
+            {
+                // Handle trip request update
+                var serializedMessage = JsonSerializer.Serialize(tripRequestUpdated, JsonSerializerOptions.Web);
+                await response.WriteAsync($"data: {serializedMessage}\n\n", cancellationToken);
+                await response.Body.FlushAsync(cancellationToken);
+            }
+            else if (chatItem is TripRequestDecisionChatItem tripDecision)
+            {
+                // Handle trip request decision
+                var serializedMessage = JsonSerializer.Serialize(tripDecision, JsonSerializerOptions.Web);
+                await response.WriteAsync($"data: {serializedMessage}\n\n", cancellationToken);
+                await response.Body.FlushAsync(cancellationToken);
+            }
 
             // Handle completion
             await response.WriteAsync($"event: complete\ndata: {{}}\n\n", cancellationToken);
-            await response.Body.FlushAsync(cancellationToken);    
+            await response.Body.FlushAsync(cancellationToken);
         }
-        catch(OperationCanceledException) {}
+        catch (OperationCanceledException) { }
     }
 
     private static async Task<List<UriAttachment>> GetFileUploads(string userId, HttpRequest request, BlobServiceClient blobServiceClient, CancellationToken cancellationToken)
