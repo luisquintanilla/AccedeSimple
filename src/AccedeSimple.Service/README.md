@@ -23,28 +23,22 @@ The entry point that initializes dependencies, orchestrates workflows, and demon
 ```mermaid
 sequenceDiagram
     participant User
-    participant Liaison
+    participant Concierge
     participant TravelAgency
     participant Admin
 
-    User->>Liaison: Submit travel request
-    Liaison-->>TravelAgency: Plan trip
-    TravelAgency->>TravelAgency: Find flights
-    TravelAgency->>TravelAgency: Find hotel
-    TravelAgency->>TravelAgency: Find car
-    TravelAgency-->>Liaison: Send Itineraries for consideration
-    Liaison->>User: Display candidate itineraries to user
-    User->>Liaison: Choose itinerary
-    Liaison-->>Admin: Request travel approval
-    Admin-->>Liaison: Confirm travel approval
-    Liaison->>User: Send approval confirmation
-    Liaison-->>TravelAgency: Book travel
-    TravelAgency-->>Liaison: Confirm booking
-    Liaison->>User: Send booking confirmation
-    User->>Liaison: Submit receipts
-    Liaison-->>Admin: Process receipts
-    User->>Liaison: Generate expense report
-    Liaison-->>Admin: Generate expense report
-    Admin-->>Liaison: Send expense report
-    Liaison->>User: Display expense report
+    User->>Concierge: Submit travel request
+    Concierge-->>TravelAgency: Plan trip
+    TravelAgency-->>Concierge: Send itineraries for consideration
+    Concierge->>User: Display candidate itineraries to user
+    User->>Concierge: Choose itinerary
+    Concierge-->>Admin: Request travel approval
+    Admin-->>Concierge: Confirm travel approval
+    Concierge->>User: Send approval confirmation
+    User->>Concierge: Submit receipts
+    Concierge-->>Admin: Process receipts
+    User->>Concierge: Generate expense report
+    Concierge-->>Admin: Generate expense report
+    Admin-->>Concierge: Send expense report
+    Concierge->>User: Display expense report
 ```

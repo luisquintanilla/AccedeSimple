@@ -4,16 +4,26 @@
 
 Accede Travel Concierge is a modular application designed to streamline travel planning and expense management. The project is structured into three main components:
 
-## .NET Projects
+## Project Structure
 
+### .NET Projects
 - **`AccedeSimple.AppHost/`**: Serves as the entry point and host for the application, managing configuration and startup logic.
 - **`AccedeSimple.Service/`**: Implements the core business logic and service layer, handling travel planning, approvals, and expense processing.
 - **`AccedeSimple.ServiceDefaults/`**: Provides default implementations and shared utilities to support the service layer.
+- **`AccedeSimple.Domain/`**: Contains domain models and logic for features such as approvals, bookings, expenses, trips, and shared utilities.
+- **`AccedeSimple.MCPServer/`**: Implements the MCP server functionality for extended capabilities.
 
-### Other projects
+### Other Projects
 
-- **webui** - React web application
-- **localguide** - The FastAPI Web API provides endpoints for retrieving city attractions using an AI agent. This feature enhances the travel planning experience by offering intelligent recommendations tailored to user preferences.
+- **`webui/`**: React web application for the user interface.
+  - **`src/components/`**: Contains React components like `AdminPage`, `ChatContainer`, and `VirtualizedChatList`.
+  - **`src/services/`**: Includes service files like `AdminService.ts` and `ChatService.ts`.
+  - **`src/styles/`**: Contains CSS files for styling various components.
+  - **`src/types/`**: TypeScript type definitions for the application.
+- **`localguide/`**: FastAPI Web API for retrieving city attractions using an AI agent.
+  - **`Dockerfile`**: Configuration for containerizing the API.
+  - **`main.py`**: Entry point for the FastAPI application.
+  - **`pyproject.toml`**: Python project configuration.
 
 ## Prerequisites
 
@@ -37,8 +47,17 @@ To run the application, ensure the following tools and frameworks are installed:
 2. **Install dependencies**:
    Ensure you have the required .NET SDK installed, then restore dependencies:
 
+   **.NET**
+
    ```bash
    dotnet restore
+   ```
+
+   **Python**
+
+   ```bash
+   cd src/localguide
+   uv sync
    ```
 
 3. **Configure user secrets**
@@ -78,4 +97,3 @@ Follow the standard [deployment guidance for Aspire](https://learn.microsoft.com
    ```bash
    azd up
    ```
-
