@@ -41,7 +41,8 @@ client = AsyncAzureOpenAI(
     api_version="2024-06-01"
 )
 
-model = OpenAIModel('gpt-4.1', provider=OpenAIProvider(openai_client=client))
+model_name = os.environ.get("MODEL_NAME", "gpt-4o-mini")
+model = OpenAIModel(model_name, provider=OpenAIProvider(openai_client=client))
 agent = Agent(model, 
               output_type=CityAttractions,
               system_prompt="You are an expert local guide. Provide detailed information about attractions in the specified city.")

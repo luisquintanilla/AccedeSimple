@@ -8,7 +8,7 @@ namespace AccedeSimple.Domain
         public string Description { get; init; } = string.Empty;
         public decimal Amount { get; init; }
         public ExpenseCategory Category { get; init; }
-        public DateTime Date { get; init; }
+        public DateTime? Date { get; init; }
         public string ImageUrl { get; init; } = string.Empty;
 
         public ReceiptData WithCategory(ExpenseCategory newCategory) =>
