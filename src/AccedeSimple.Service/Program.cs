@@ -15,12 +15,13 @@ using Microsoft.Extensions.Hosting;
 using AccedeSimple.Service;
 using Microsoft.AspNetCore.Mvc;
 using ModelContextProtocol.Client;
-using ModelContextProtocol.Protocol.Transport;
 using Microsoft.AspNetCore.Http.Features;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Collections.Concurrent;
 using AccedeSimple.Service.Services;
+using Microsoft.Extensions.VectorData;
+using Microsoft.SemanticKernel.Connectors.SqliteVec;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,14 +55,24 @@ builder.Services.AddMcpClient();
 
 var kernel = builder.Services.AddKernel();
 
-kernel.Services.AddChatClient(modelName: Environment.GetEnvironmentVariable("MODEL_NAME") ?? "gpt-4o-mini");
+kernel.Services
+    .AddChatClient(modelName: Environment.GetEnvironmentVariable("MODEL_NAME") ?? "gpt-4o-mini")
+    .UseFunctionInvocation();
 
+kernel.Services.AddEmbeddingGenerator(modelName: "text-embedding-3-small");
+kernel.Services.AddSqliteCollection<int, Document>("Documents", "Data Source=documents.db");
 kernel.Services.AddTransient<ProcessService>();
 kernel.Services.AddTransient<MessageService>();
+kernel.Services.AddTransient<SearchService>();
 
 builder.Services.AddTravelProcess();
 
 var app = builder.Build();
+
+var k = app.Services.GetRequiredService<Kernel>();
+var collection = k.GetRequiredService<VectorStoreCollection<int, Document>>();
+var IngestionService = new IngestionService(collection);
+await IngestionService.IngestAsync(Path.Combine(AppContext.BaseDirectory, "docs"));
 
 app.MapEndpoints();
 
