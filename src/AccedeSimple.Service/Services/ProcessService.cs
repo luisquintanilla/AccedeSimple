@@ -54,6 +54,9 @@ public class ProcessService
                 var body = await localGuideRequest.Content.ReadAsStringAsync();
                 await _messageService.AddMessageAsync(new AssistantResponse(body), _userSettings.UserId);
                 break;
+            case UserIntent.AskPolicyQuestions:
+                await _process.StartAsync(_kernel, new KernelProcessEvent { Id = nameof(PolicyInquiryStep.ProcessPolicyInquiryAsync), Data = userInput });
+                break;
             case UserIntent.StartTravelPlanning:
                 await _process.StartAsync(_kernel, new KernelProcessEvent { Id = nameof(TravelPlanningStep.PlanTripAsync), Data = userInput });
                 break;

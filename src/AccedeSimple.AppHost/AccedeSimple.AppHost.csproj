@@ -16,7 +16,7 @@
     <PackageReference Include="Aspire.Hosting.Azure.Storage" Version="9.3.0" />
     <PackageReference Include="Aspire.Hosting.NodeJS" Version="9.3.0" />
     <PackageReference Include="Aspire.Hosting.Python" Version="9.3.0" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.4.1-beta.289" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.4.0" />
   </ItemGroup>
 
   <ItemGroup>

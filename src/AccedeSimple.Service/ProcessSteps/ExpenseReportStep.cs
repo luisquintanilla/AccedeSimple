@@ -53,8 +53,8 @@ public class ExpenseReportStep : KernelProcessStep
         // Expense report
         var report = new ExpenseReport(
             ReportId: Guid.NewGuid().ToString(),
-            TripId: "My Trip ID",
-            UserId: "My Employee Id",
+            TripId: null,
+            UserId: $"{_userSettings.UserId}",
             TotalExpenses: totalExpenses,
             Items: expenseItems,
             Status: ExpenseReportStatus.Draft
