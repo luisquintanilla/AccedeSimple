@@ -72,6 +72,7 @@ To run the application, ensure the following tools and frameworks are installed:
       - **Azure:ResourceGroup** - The name of your Azure OpenAI Resource is deployed to.
       - **Azure:Location** - The location you deployed your Azure OpenAI Resource to.
       - **Azure:AllowResourceGroupCreation**  - Set to *false* to use existing resource.
+      - **AzureAIFoundry:Project** - The name of the [Azure AI Foundry Project](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/create-projects) within the above subscription and resource group (and within an AI Foundry Hub) that can be used for content safety evaluations. See [Setting Up Azure AI Foundry for Safety Evaluations](https://devblogs.microsoft.com/dotnet/evaluating-ai-content-safety/#setting-up-azure-ai-foundry-for-safety-evaluations).
 
 ### Running the app
 
