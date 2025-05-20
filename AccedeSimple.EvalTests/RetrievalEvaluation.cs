@@ -4,17 +4,20 @@ using Azure.Identity;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.AI.Evaluation;
 using Microsoft.Extensions.AI.Evaluation.Quality;
+using Microsoft.Extensions.AI.Evaluation.Reporting;
+using Microsoft.Extensions.AI.Evaluation.Reporting.Formats.Html;
+using Microsoft.Extensions.AI.Evaluation.Reporting.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.VectorData;
-using OpenAI.Chat;
+using System.Diagnostics;
 
 
 namespace AccedeSimple.EvalTests
 {
-    
+
 
     [TestClass]
     public sealed class RetrievalEvaluation
@@ -65,33 +68,80 @@ namespace AccedeSimple.EvalTests
         [TestMethod]
         public async Task TestRetrieval()
         {
+            // Build the vector store and ingest the documents
             var IngestionService = serviceProvider.GetRequiredService<IngestionService>();
             await IngestionService.IngestAsync(Path.Combine(AppContext.BaseDirectory, "docs"));
 
             var searchService = serviceProvider.GetRequiredService<SearchService>();
 
+            // Search the vector store for relevant chunks
             var userQuery = "What expenses cannot be reimbursed?";
 
-            List<Document> results = [];
-            await foreach (var result in searchService.SearchAsync(userQuery))
+            List<Document> docs = [];
+            await foreach (var doc in searchService.SearchAsync(userQuery))
             {
-                results.Add(result);
+                docs.Add(doc);
             }
 
+            // Run the retrieval evaluation on the results
             var chatConfig = serviceProvider.GetRequiredService<ChatConfiguration>();
 
+            var reportStorePath = Path.Combine(AppContext.BaseDirectory, "EvalData");
+            if (!Directory.Exists(reportStorePath))
+            {
+                Directory.CreateDirectory(reportStorePath);
+            }
+
             var retrievalEvaluator = new RetrievalEvaluator();
-            var evalResult = await retrievalEvaluator.EvaluateAsync(
-                new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, userQuery), 
-                new ChatResponse(), 
-                chatConfig, 
-                [new RetrievalEvaluatorContext(results.Where(r => r.Text is not null).Select(r => r.Text!))]
+            var reportStore = DiskBasedReportingConfiguration.Create(
+                reportStorePath,
+                [new RetrievalEvaluator()],
+                chatConfig,
+                enableResponseCaching: false);
+
+            var scenarioRun = await reportStore.CreateScenarioRunAsync("RAG Chunk Retrieval", "Reimbursable Expenses");
+
+            var evalResult = await scenarioRun.EvaluateAsync(
+                new Microsoft.Extensions.AI.ChatMessage(ChatRole.User, userQuery),
+                new ChatResponse(),
+                [new RetrievalEvaluatorContext(docs.Select(r => r.Text!))]
             );
 
+            // flush results to disk
+            await scenarioRun.DisposeAsync();
+
+            // check some of the results
             var retrievalMetric = evalResult.Get<NumericMetric>(RetrievalEvaluator.RetrievalMetricName);
             Assert.IsNotNull(retrievalMetric);
             Assert.IsNotNull(retrievalMetric.Interpretation);
             Assert.IsFalse(retrievalMetric.Interpretation.Failed);
+
+            // generate Report
+            var resultStore = reportStore.ResultStore;
+            List<ScenarioRunResult> results = [];
+
+            await foreach (string executionName in
+                resultStore.GetLatestExecutionNamesAsync(1).ConfigureAwait(false))
+            {
+                await foreach (ScenarioRunResult result in
+                    resultStore.ReadResultsAsync(executionName).ConfigureAwait(false))
+                {
+                    results.Add(result);
+                }
+            }
+
+            var reportFile = Path.Combine(AppContext.BaseDirectory, "eval-report.html");
+            var reportWriter = new HtmlReportWriter(reportFile);
+            await reportWriter.WriteReportAsync(results);
+
+            // Open the generated report in the default browser.
+            _ = Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = reportFile,
+                    UseShellExecute = true
+                });
         }
+
     }
 }
