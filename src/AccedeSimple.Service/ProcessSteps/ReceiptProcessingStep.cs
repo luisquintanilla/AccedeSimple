@@ -8,6 +8,8 @@ using AccedeSimple.Service.Services;
 using Azure.Identity;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.AI.Evaluation;
+using Microsoft.Extensions.AI.Evaluation.Reporting;
+using Microsoft.Extensions.AI.Evaluation.Reporting.Storage;
 using Microsoft.Extensions.AI.Evaluation.Safety;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
@@ -32,7 +34,11 @@ public class ReceiptProcessingStep : KernelProcessStep
             projectName: Environment.GetEnvironmentVariable("AZURE_AI_FOUNDRY_PROJECT"))
                 .ToChatConfiguration();
 
-    private static readonly IEvaluator s_safetyEvaluator = new ContentHarmEvaluator();
+    private static readonly ReportingConfiguration s_reportingConfiguation =
+        DiskBasedReportingConfiguration.Create(
+            storageRootPath: Path.Combine(Path.GetTempPath(), "AccedeSimple"),
+            evaluators: [new ContentHarmEvaluator()],
+            chatConfiguration: s_SafetyChatConfiguration);
 
     public ReceiptProcessingStep(
         IChatClient chatClient,
@@ -85,8 +91,12 @@ public class ReceiptProcessingStep : KernelProcessStep
         // Azure AI Foundry Evaluation service requires an assistant message to be included as part of the evaluation.
         var modelResponse = new ChatMessage(ChatRole.Assistant, "Processing...");
 
+        // Generate a scenario name that uniquely identifies the request content being evaluated.
+        var scenarioName = $"Image Safety Check {AIJsonUtilities.HashDataToString([userRequest])}";
+        await using var scenarioRun = await s_reportingConfiguation.CreateScenarioRunAsync(scenarioName);
+
         var s = Stopwatch.StartNew();
-        var result = await s_safetyEvaluator.EvaluateAsync(userRequest, modelResponse, s_SafetyChatConfiguration);
+        var result = await scenarioRun.EvaluateAsync(userRequest, modelResponse);
         s.Stop();
 
         result.TryGet<NumericMetric>(HateAndUnfairnessEvaluator.HateAndUnfairnessMetricName, out var hateAndUnfairness);
