@@ -1,10 +1,27 @@
 # Accede Travel Concierge
 
+**Disclaimer: This sample is for demonstration purposes only and is not intended for production use. It may not include all the features or safeguards needed for a production environment.**
+
 ## Introduction
 
 Accede Travel Concierge is a modular application designed to streamline travel planning and expense management. The project is structured into three main components:
 
 ## Project Structure
+
+```mermaid
+graph TD
+    Service["Backend<br>(Agentic Workflows)"]
+    MCPServer["MCPServer"]
+    WebUI["Web UI"]
+    LocalGuide["Local Guide Agent"]
+
+    %% Relationships
+    WebUI -->|Uses APIs| Service
+    LocalGuide -->|Provides Data| Service
+    Service -->|Interacts With| MCPServer
+    MCPServer -->|Processes Requests| Service
+    Service -->|Manages| LocalGuide
+```
 
 ### .NET Projects
 - **`AccedeSimple.AppHost/`**: Serves as the entry point and host for the application, managing configuration and startup logic.
@@ -33,7 +50,8 @@ To run the application, ensure the following tools and frameworks are installed:
 - [Python 3.12 or greater](https://www.python.org/downloads/)
 - [UV](https://docs.astral.sh/uv/)
 - [Visual Studio Code](https://code.visualstudio.com/)
-- [Azure OpenAI Resource](https://learn.microsoft.com/azure/ai-services/openai/how-to/create-resource?pivots=web-portal) with the `gpt-4.1` model deployed and [permissions](https://learn.microsoft.com/azure/ai-services/openai/how-to/role-based-access-control).
+- [Azure AI Foundry Project](https://learn.microsoft.com/azure/ai-foundry/how-to/create-projects) within the above subscription and resource group (and within an AI Foundry Hub) that can be used for content safety evaluations. See [Setting Up Azure AI Foundry for Safety Evaluations](https://devblogs.microsoft.com/dotnet/evaluating-ai-content-safety/#setting-up-azure-ai-foundry-for-safety-evaluations).
+   - [Azure OpenAI Resource](https://learn.microsoft.com/azure/ai-services/openai/how-to/create-resource?pivots=web-portal) with the `gpt-4.1` and `text-embedding-3-small` model deployed and [permissions](https://learn.microsoft.com/azure/ai-services/openai/how-to/role-based-access-control).
 - [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd?tabs=winget-windows%2Cbrew-mac%2Cscript-linux&pivots=os-windows) (if applicable)
 
 ## Quick Start
@@ -72,7 +90,7 @@ To run the application, ensure the following tools and frameworks are installed:
       - **Azure:ResourceGroup** - The name of your Azure OpenAI Resource is deployed to.
       - **Azure:Location** - The location you deployed your Azure OpenAI Resource to.
       - **Azure:AllowResourceGroupCreation**  - Set to *false* to use existing resource.
-      - **AzureAIFoundry:Project** - The name of the [Azure AI Foundry Project](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/create-projects) within the above subscription and resource group (and within an AI Foundry Hub) that can be used for content safety evaluations. See [Setting Up Azure AI Foundry for Safety Evaluations](https://devblogs.microsoft.com/dotnet/evaluating-ai-content-safety/#setting-up-azure-ai-foundry-for-safety-evaluations).
+      - **AzureAIFoundry:Project** - The name of the Azure AI Foundry Project.
 
 ### Running the app
 
